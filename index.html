@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iOS Dev Quick Guide 101 — Neder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0B0B16;
+      --surface: #12121F;
+      --card: #18182A;
+      --border: rgba(255,255,255,0.07);
+      --text: #E2E2F0;
+      --muted: #5A5A80;
+      --accent: #0A84FF;
+      --green: #30D158;
+      --purple: #BF5AF2;
+      --sidebar-w: 260px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      position: relative;
+      padding: 72px 56px 64px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .site-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(10,132,255,0.09) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 5%  80%, rgba(191,90,242,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .site-header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; max-width: 860px; }
+
+    .header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      padding: 6px 14px;
+      border: 1px solid rgba(10,132,255,0.3);
+      border-radius: 4px;
+      background: rgba(10,132,255,0.08);
+    }
+    .header-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+    .site-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.025em;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .site-header h1 span { color: var(--accent); }
+
+    .header-desc {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 32px;
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+    .header-meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .header-meta-item .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .header-meta-item .value { font-size: 14px; color: var(--text); font-weight: 500; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      padding: 32px 0;
+      background: var(--surface);
+    }
+    .sidebar-title {
+      padding: 0 24px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 9px 24px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+      transition: all 0.18s ease;
+      border-left: 2px solid transparent;
+      line-height: 1.35;
+    }
+    .sidebar nav a:hover { color: var(--text); background: rgba(255,255,255,0.028); }
+    .sidebar nav a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(10,132,255,0.07);
+    }
+    .sidebar nav a .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      flex-shrink: 0;
+      width: 20px;
+      margin-top: 2px;
+      opacity: 0.55;
+    }
+    .sidebar nav a.active .num { color: var(--accent); opacity: 1; }
+
+    /* ── MAIN ── */
+    .main { flex: 1; min-width: 0; }
+
+    /* ── TOPIC SECTION ── */
+    .topic {
+      padding: 64px 60px;
+      border-bottom: 1px solid var(--border);
+    }
+    .topic:nth-child(even) { background: rgba(255,255,255,0.012); }
+
+    .topic-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .topic-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 4px 10px;
+      border: 1px solid rgba(10,132,255,0.3);
+      border-radius: 4px;
+      background: rgba(10,132,255,0.08);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .topic-title-block h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.55rem, 2.8vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .topic-subtitle {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 5px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* section label rule */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    /* what it is */
+    .what-it-is { margin-bottom: 32px; }
+    .what-it-is p {
+      color: var(--text);
+      font-size: 15.5px;
+      line-height: 1.78;
+      max-width: 740px;
+    }
+    .what-it-is p code,
+    .what-it-is p strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: rgba(255,255,255,0.07);
+      padding: 1px 6px;
+      border-radius: 3px;
+      color: #C9C9F0;
+    }
+    .what-it-is p strong { font-weight: 600; color: #E2E2F0; background: none; padding: 0; font-family: 'DM Sans', sans-serif; font-size: inherit; }
+
+    /* code block */
+    .code-block {
+      margin-bottom: 32px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #0D0D1C;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FFBD2E; }
+    .dot-g { background: #28CA41; }
+    .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+    .code-block pre { margin: 0; border-radius: 0; }
+    .code-block pre code.hljs {
+      font-family: 'JetBrains Mono', monospace !important;
+      font-size: 13px !important;
+      line-height: 1.68 !important;
+      padding: 22px 22px !important;
+      background: #0D0D1C !important;
+    }
+
+    /* use case */
+    .use-case {
+      display: flex;
+      gap: 16px;
+      padding: 18px 20px;
+      background: rgba(48,209,88,0.055);
+      border: 1px solid rgba(48,209,88,0.18);
+      border-radius: 8px;
+      max-width: 740px;
+    }
+    .use-case-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .use-case-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+    .use-case-content p { font-size: 14.5px; color: var(--text); line-height: 1.62; }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      padding: 40px 60px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .site-footer p { font-size: 13px; color: var(--muted); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .site-header { padding: 48px 24px 40px; }
+      .topic { padding: 48px 24px; }
+      .site-footer { padding: 32px 24px; }
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #1E1E30; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-tag">Mobile Programming 2 &middot; Final Exam &middot; Week 16</div>
+    <h1>iOS Dev Quick<br>Guide <span>101</span></h1>
+    <p class="header-desc">A personal reference guide covering 10 core topics from the course — written as both a study resource and a portfolio piece.</p>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <span class="label">Author</span>
+        <span class="value">F&eacute;lix Neder</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="label">Institution</span>
+        <span class="value">Universidad La Salle Chihuahua</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="label">Year</span>
+        <span class="value">2026</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="label">Topics covered</span>
+        <span class="value">10 of 17</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Contents</div>
+    <nav id="toc">
+      <a href="#t1" class="active"><span class="num">01</span>Swift Basics</a>
+      <a href="#t2"><span class="num">02</span>OOP</a>
+      <a href="#t3"><span class="num">03</span>SwiftUI</a>
+      <a href="#t4"><span class="num">04</span>MVVM + @Observable</a>
+      <a href="#t5"><span class="num">05</span>Navigation</a>
+      <a href="#t6"><span class="num">06</span>Lists &amp; Tables</a>
+      <a href="#t7"><span class="num">07</span>HTTP &amp; JSON</a>
+      <a href="#t8"><span class="num">08</span>MapKit</a>
+      <a href="#t9"><span class="num">09</span>Camera &amp; QR</a>
+      <a href="#t10"><span class="num">10</span>CoreLocation</a>
+    </nav>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main">
+
+    <!-- ─── TOPIC 1 ─── -->
+    <section class="topic" id="t1">
+      <div class="topic-header">
+        <span class="topic-num">01</span>
+        <div class="topic-title-block">
+          <h2>Swift Basics</h2>
+          <div class="topic-subtitle">Variables &middot; Optionals &middot; Functions &middot; Closures</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>Swift is Apple's compiled, type-safe programming language introduced in 2014 as a modern replacement for Objective-C. It is used to build apps for iOS, macOS, watchOS, and tvOS. Swift's standout features are <strong>optionals</strong> (values that may or may not exist), <strong>type inference</strong> (the compiler figures out types from context), <strong>closures</strong> (self-contained blocks of code you can pass around), and clean syntax that reduces boilerplate. Every iOS project starts here — models, logic, views, and services are all written in Swift.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">// Constants and variables
+let appName: String = "CardVault"    // immutable
+var cardCount: Int = 0              // mutable
+
+// Type inference — compiler deduces the type
+var marketValue = 45.00             // Double
+var isGraded = false                // Bool
+
+// Optionals — a value that might be nil
+var cardOwner: String? = nil
+cardOwner = "neder_dev"
+
+// Safe unwrapping — guard lets you exit early
+func greetOwner(_ name: String?) -&gt; String {
+    guard let name = name else {
+        return "Welcome, guest collector!"
+    }
+    return "Vault accessed by: \(name)!"
+}
+
+// nil coalescing — provide a fallback
+let display = cardOwner ?? "Anonymous Collector"   // "neder_dev"
+
+// Closure — a block you can assign and pass
+let doubleValue: (Int) -&gt; Int = { v in v * 2 }
+print(doubleValue(50))   // 100
+
+// Trailing closure syntax (used everywhere in SwiftUI)
+let prices = [12.5, 250.0, 4.75, 120.0]
+let premiumCards = prices.filter { $0 &gt; 50.0 }
+print(premiumCards)   // [250.0, 120.0]
+
+// async/await — modern concurrency
+func fetchCardData() async throws -&gt; Data {
+    let url = URL(string: "https://api.example.com/cards")!
+    let (data, _) = try await URLSession.shared.data(from: url)
+    return data
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">🃏</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>Every line of my card collecting app is Swift. Optionals handled missing fields in the JSON (like a card illustration URL or grading subgrades that might be absent), closures powered button callbacks and sorting parameters, and async/await made network calls to the trading card database API clean and readable without nested callbacks.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 2 ─── -->
+    <section class="topic" id="t2">
+      <div class="topic-header">
+        <span class="topic-num">02</span>
+        <div class="topic-title-block">
+          <h2>OOP — Classes, Structs, Enums &amp; Protocols</h2>
+          <div class="topic-subtitle">Value types &middot; Reference types &middot; Named cases &middot; Contracts</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>Swift has four building blocks for organizing data and behavior. <strong>Structs</strong> are value types — copied when assigned or passed, making them thread-safe and predictable by default. <strong>Classes</strong> are reference types — all variables point to the same object in memory, ideal for shared mutable state. <strong>Enums</strong> define a fixed, exhaustive set of named cases with optional associated values. <strong>Protocols</strong> define a contract — a required set of properties and methods — that any type can adopt, enabling polymorphism and dependency injection without rigid class hierarchies.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">// Protocol — a contract any type can adopt
+protocol Displayable {
+    var displayName: String { get }
+    func describe() -&gt; String
+}
+
+// Enum — fixed named cases (with raw value)
+enum CardType: String, CaseIterable {
+    case creature = "Creature"
+    case spell    = "Spell"
+    case energy   = "Energy"
+}
+
+// Struct — value type, conforms to protocols
+struct TradingCard: Displayable, Identifiable, Codable {
+    let id: UUID
+    var name: String
+    var marketPrice: Double
+    var type: CardType
+
+    // Computed property
+    var displayName: String { name }
+    func describe() -&gt; String {
+        "\(name) (\(type.rawValue)) — $\(marketPrice)"
+    }
+}
+
+// Class — reference type, shared mutable state
+class CardBinder {
+    private(set) var cards: [TradingCard] = []
+
+    func add(_ card: TradingCard) {
+        guard !cards.contains(where: { $0.id == card.id }) else { return }
+        cards.append(card)
+    }
+
+    func remove(_ card: TradingCard) {
+        cards.removeAll { $0.id == card.id }
+    }
+
+    var totalPortfolioValue: Double {
+        cards.reduce(0.0) { $0 + $1.marketPrice }
+    }
+}
+
+// Usage
+let rareMonster = TradingCard(id: UUID(), name: "Cyber Dragon",
+                              marketPrice: 89.99, type: .creature)
+let binder = CardBinder()
+binder.add(rareMonster)
+print(binder.totalPortfolioValue)     // 89.99
+print(rareMonster.describe())         // Cyber Dragon (Creature) — $89.99
+
+// Struct is copied — binder portfolio is NOT affected
+var cardCopy = rareMonster
+cardCopy.marketPrice = 9999.0
+print(binder.totalPortfolioValue)     // still 89.99</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">🏗️</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>In my card collecting app, TradingCard was a struct (safe to copy and display inside UI cells), while CardBinder was a class (one shared inventory instance passed throughout the app). CardType was an enum so SwiftUI's ForEach could cleanly iterate all cases to build type-based filter tabs. Identifiable and Codable were protocols required by SwiftUI lists and JSON decoders automatically.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 3 ─── -->
+    <section class="topic" id="t3">
+      <div class="topic-header">
+        <span class="topic-num">03</span>
+        <div class="topic-title-block">
+          <h2>SwiftUI — Views, Layouts &amp; Modifiers</h2>
+          <div class="topic-subtitle">Declarative UI &middot; Stacks &middot; State &middot; Composition</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>SwiftUI is Apple's declarative UI framework, released in 2019. Instead of imperatively creating and configuring views one by one (like UIKit), you declare <em>what</em> the UI looks like given a certain state — and SwiftUI re-renders the affected parts automatically when that state changes. Layouts are built by composing stacks: <code>VStack</code> (vertical), <code>HStack</code> (horizontal), and <code>ZStack</code> (layered). <strong>Modifiers</strong> chain off any view to customize font, color, padding, shadow, animation, and more — each modifier returns a new, wrapped view so they compose cleanly.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+
+struct TradingCardView: View {
+    let card: TradingCard
+    @State private var isWishlisted = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+
+            // Hero artwork area
+            ZStack(alignment: .topTrailing) {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color(.systemGray6))
+                    .frame(height: 180)
+
+                Image(systemName: card.type == .creature
+                      ? "shield.fill" : "wand.and.stars")
+                    .font(.system(size: 44))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                // Rarity / Type badge
+                Text(card.type.rawValue)
+                    .font(.caption2.weight(.semibold))
+                    .padding(.horizontal, 8).padding(.vertical, 4)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .padding(10)
+            }
+
+            // Text block
+            VStack(alignment: .leading, spacing: 3) {
+                Text(card.name)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Text(card.describe())
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+
+            // Price + action row
+            HStack(alignment: .center) {
+                Text("$\(card.marketPrice, specifier: "%.2f")")
+                    .font(.title3.weight(.bold))
+                    .foregroundStyle(.blue)
+
+                Spacer()
+
+                Button {
+                    withAnimation(.spring(response: 0.3)) {
+                        isWishlisted.toggle()
+                    }
+                } label: {
+                    Label(
+                        isWishlisted ? "Saved" : "Wishlist",
+                        systemImage: isWishlisted
+                            ? "heart.fill"
+                            : "heart"
+                    )
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(isWishlisted ? .red : .blue)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(16)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .shadow(color: .black.opacity(0.09), radius: 10, y: 5)
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">📱</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>Every screen in my card collecting app was built with SwiftUI. The main showcase screen used a LazyVGrid of TradingCardViews. The card detail view used a ScrollView with a ZStack for displaying holographic overlays. All styling was done through modifier chains — no Interface Builder, no storyboards. @State on isWishlisted caused the heart button to re-render automatically with the appropriate icon fill and red tint on every tap.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 4 ─── -->
+    <section class="topic" id="t4">
+      <div class="topic-header">
+        <span class="topic-num">04</span>
+        <div class="topic-title-block">
+          <h2>MVVM + @Observable</h2>
+          <div class="topic-subtitle">Architecture &middot; Separation of concerns &middot; Reactive state</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>Model-View-ViewModel (MVVM) is an architecture pattern that separates code into three layers. The <strong>Model</strong> holds raw data. The <strong>ViewModel</strong> contains business logic, transforms data for display, and handles async work. The <strong>View</strong> simply renders what the ViewModel exposes — no logic lives there. In iOS 17+, the <code>@Observable</code> macro replaces the older <code>@ObservableObject + @Published</code> pattern. It automatically tracks which properties each View reads and triggers UI updates only when those specific values change — more granular and more efficient.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+import Observation
+
+// ── ViewModel — all business logic lives here ──────────
+@Observable
+class BinderViewModel {
+    var cards:     [TradingCard] = []
+    var isLoading: Bool          = false
+    var errorMessage: String?
+
+    // Derived state — computed from cards
+    var totalValue: Double { cards.reduce(0) { $0 + $1.marketPrice } }
+    var cardCount:  Int    { cards.count }
+    var isEmpty:    Bool   { cards.isEmpty }
+
+    func add(_ card: TradingCard) {
+        guard !cards.contains(where: { $0.id == card.id }) else { return }
+        cards.append(card)
+    }
+
+    func remove(_ card: TradingCard) {
+        cards.removeAll { $0.id == card.id }
+    }
+
+    func clearBinder() { cards.removeAll() }
+
+    func syncWithCloud() async {
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            let collectionData = CollectionPayload(cards: cards)
+            let _ = try await CardAPIService.syncCollection(collectionData)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+// ── View — only renders, zero business logic ───────────
+struct BinderView: View {
+    // @State with @Observable (no @StateObject needed)
+    @State private var vm = BinderViewModel()
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if vm.isEmpty {
+                    ContentUnavailableView(
+                        "Your binder is empty",
+                        systemImage: "square.stack.3d.up",
+                        description: Text("Scan physical cards or browse the database to add them")
+                    )
+                } else {
+                    List {
+                        ForEach(vm.cards) { card in
+                            HStack {
+                                Text(card.name)
+                                Spacer()
+                                Text("$\(card.marketPrice, specifier: "%.2f")")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .swipeActions {
+                                Button("Delete", role: .destructive) {
+                                    vm.remove(card)
+                                }
+                            }
+                        }
+
+                        Section {
+                            HStack {
+                                Text("Total Portfolio Value").bold()
+                                Spacer()
+                                Text("$\(vm.totalValue, specifier: "%.2f")").bold()
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("My Binder (\(vm.cardCount))")
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Sync Collection") { Task { await vm.syncWithCloud() } }
+                        .disabled(vm.isEmpty)
+                        .buttonStyle(.borderedProminent)
+                }
+            }
+            .overlay { if vm.isLoading { ProgressView() } }
+        }
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">🔁</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>BinderViewModel handled all add/remove logic, portfolio value calculations, and the async cloud synchronization request — none of that structural math lived in the View layer. BinderView just observed properties from the view model and rendered UI updates accordingly. This separation made it incredibly simple to test inventory computations detached from visual layouts.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 5 ─── -->
+    <section class="topic" id="t5">
+      <div class="topic-header">
+        <span class="topic-num">05</span>
+        <div class="topic-title-block">
+          <h2>Navigation — NavigationStack &amp; TabView</h2>
+          <div class="topic-subtitle">Push-pop hierarchy &middot; Tab bars &middot; Deep linking</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p><code>NavigationStack</code> (iOS 16+) manages a push/pop hierarchy of views. The user drills in by tapping a <code>NavigationLink</code> and goes back with the system back button. It uses a type-safe, value-based API: you attach a <code>navigationDestination</code> modifier that maps a value type to a destination view. <code>TabView</code> creates a tab bar at the bottom of the screen — each tab is an independent root view with its own navigation stack. Together, these two patterns cover nearly every navigation need in a standard iOS app.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+
+// ── Root: TabView with three sections ─────────────────
+struct AppRootView: View {
+    @State private var selectedTab = 0
+
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            CollectionTab()
+                .tabItem { Label("Collection", systemImage: "square.stack.fill") }
+                .tag(0)
+
+            WishlistTab()
+                .tabItem { Label("Wishlist",   systemImage: "heart.fill") }
+                .tag(1)
+
+            ProfileTab()
+                .tabItem { Label("Profile",    systemImage: "person.circle") }
+                .tag(2)
+        }
+    }
+}
+
+// ── Collection tab — NavigationStack for drill-down ───
+struct CollectionTab: View {
+    let inventory: [TradingCard] = TradingCard.samples
+
+    var body: some View {
+        NavigationStack {
+            List(inventory) { card in
+                // Value-based link — pushes when tapped
+                NavigationLink(value: card) {
+                    CardRowView(card: card)
+                }
+            }
+            .navigationTitle("Main Vault")
+            .navigationBarTitleDisplayMode(.large)
+            // Maps a TradingCard value → a destination view
+            .navigationDestination(for: TradingCard.self) { card in
+                CardDetailView(card: card)
+            }
+        }
+    }
+}
+
+// ── Programmatic navigation with a path ───────────────
+struct CollectionWithPathView: View {
+    @State private var navigationPath = NavigationPath()
+
+    var body: some View {
+        NavigationStack(path: $navigationPath) {
+            VStack(spacing: 16) {
+                Button("Inspect Secret Rare Card") {
+                    navigationPath.append(TradingCard.exampleRare)
+                }
+                Button("Return to Library Root") {
+                    navigationPath.removeLast(navigationPath.count)
+                }
+            }
+            .navigationTitle("Vault Dashboard")
+            .navigationDestination(for: TradingCard.self) { c in
+                CardDetailView(card: c)
+            }
+        }
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">🗺️</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>My card collecting app used a TabView configuration containing three core views: Collection, Wishlist, and Profile. The Collection tab embedded a value-driven NavigationStack, ensuring that tapping individual cards safely pushed a dedicated CardDetailView to inspect grading details and market history. Value-based navigation states make deep-linking direct card scans effortless.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 6 ─── -->
+    <section class="topic" id="t6">
+      <div class="topic-header">
+        <span class="topic-num">06</span>
+        <div class="topic-title-block">
+          <h2>Lists &amp; Tables</h2>
+          <div class="topic-subtitle">Lazy rows &middot; Swipe actions &middot; Sections &middot; Search</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p><code>List</code> is SwiftUI's primary scrollable container for displaying rows of data. It renders lazily — only visible rows are created, making it efficient even with thousands of items. List supports swipe actions, pull-to-refresh, editing mode, multi-selection, and sections. The <code>.searchable</code> modifier adds a system search bar that filters the data source in real time. For data-grid-style layouts on iPad and macOS, <code>Table</code> provides sortable columns with a header row. List and Table cover virtually every data-display scenario in iOS apps.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+
+struct CardBinderListView: View {
+    @State private var allCards: [TradingCard] = TradingCard.samples
+    @State private var searchText = ""
+
+    // Computed: filtered by search text, grouped by type
+    var filteredCards: [TradingCard] {
+        searchText.isEmpty
+            ? allCards
+            : allCards.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText)
+              }
+    }
+
+    var groupedByTypes: [CardType: [TradingCard]] {
+        Dictionary(grouping: filteredCards) { $0.type }
+    }
+
+    var body: some View {
+        List {
+            ForEach(CardType.allCases, id: \.self) { typeKey in
+                if let sections = groupedByTypes[typeKey], !sections.isEmpty {
+                    Section(typeKey.rawValue) {
+                        ForEach(sections) { card in
+                            CardRowView(card: card)
+                                // Swipe left — destructive delete from binder
+                                .swipeActions(edge: .trailing) {
+                                    Button("Delete", role: .destructive) {
+                                        deleteCard(card)
+                                    }
+                                }
+                                // Swipe right — quick add to wishlist
+                                .swipeActions(edge: .leading) {
+                                    Button {
+                                        addToWishlist(card)
+                                    } label: {
+                                        Label("Wishlist", systemImage: "heart.badge.plus")
+                                    }
+                                    .tint(.green)
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        .listStyle(.insetGrouped)
+        .searchable(text: $searchText, prompt: "Search index matching name…")
+        .refreshable {
+            // Pull-to-refresh — async values update
+            await reloadLiveMarketPrices()
+        }
+        .animation(.default, value: filteredCards)
+        .navigationTitle("Card Index")
+    }
+
+    func deleteCard(_ c: TradingCard)      { allCards.removeAll { $0.id == c.id } }
+    func addToWishlist(_ c: TradingCard)   { /* Append to wishlist data controller */ }
+    func reloadLiveMarketPrices() async    { /* await API refresh loop */ }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">📋</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>The main library inventory in my app utilized an inset-grouped List layout split cleanly into card categories (Creatures, Spells, Energies). Left-swipe shortcuts dropped items straight into a deck planner, while right swipes purged items from local collections. Incorporating .searchable allowed collectors to narrow down thousands of indexed cards dynamically.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 7 ─── -->
+    <section class="topic" id="t7">
+      <div class="topic-header">
+        <span class="topic-num">07</span>
+        <div class="topic-title-block">
+          <h2>WebView &amp; HTTP — REST / JSON</h2>
+          <div class="topic-subtitle">URLSession &middot; Codable &middot; async/await &middot; WKWebView</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>Most iOS apps talk to a backend via HTTP REST APIs. Apple's <code>URLSession</code> handles all network requests; with Swift's <code>async/await</code>, calls are linear and readable. JSON responses map to Swift types automatically using the <code>Codable</code> protocol — just conform your model and <code>JSONDecoder</code> handles the conversion. POST requests send encoded Swift types as JSON bodies. <code>WKWebView</code> (wrapped in a <code>UIViewRepresentable</code>) embeds a full web browser inside a native SwiftUI view, useful for terms pages, external content, or hybrid web features.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+import WebKit
+
+// ── 1. Codable model — maps JSON keys automatically ───
+struct TradingCard: Codable, Identifiable {
+    let id:          Int
+    let name:        String
+    let marketPrice: Double
+    let type:        String
+    let imageURL:    String?
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, type
+        case marketPrice = "market_price" // snake_case → camelCase
+        case imageURL    = "image_url"
+    }
+}
+
+// ── 2. Network service layer ──────────────────────────
+struct CardAPIService {
+    private static let baseURL = "https://api.cardvault.com/v1"
+
+    // GET — decode global registry database array
+    static func fetchCardRegistry() async throws -&gt; [TradingCard] {
+        let url = URL(string: "\(baseURL)/cards")!
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard (response as? HTTPURLResponse)?.statusCode == 200
+        else { throw URLError(.badServerResponse) }
+        return try JSONDecoder().decode([TradingCard].self, from: data)
+    }
+
+    // POST — upload local collection contents to server registry
+    static func syncCollection(_ payload: CollectionPayload) async throws -&gt; SyncReceipt {
+        var request = URLRequest(url: URL(string: "\(baseURL)/sync")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(payload)
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return try JSONDecoder().decode(SyncReceipt.self, from: data)
+    }
+}
+
+// ── 3. WKWebView in SwiftUI (Used for official pricing rulebooks)
+struct TCGWebView: UIViewRepresentable {
+    let siteURL: URL
+
+    func makeUIView(context: Context) -&gt; WKWebView {
+        let webView = WKWebView()
+        webView.load(URLRequest(url: siteURL))
+        return webView
+    }
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
+
+// ── 4. View that fetches on appear ────────────────────
+struct DatabaseView: View {
+    @State private var networkCards: [TradingCard] = []
+    @State private var itemsLoading = false
+
+    var body: some View {
+        List(networkCards) { card in Text(card.name) }
+            .overlay { if itemsLoading { ProgressView() } }
+            .task {
+                itemsLoading = true
+                defer { itemsLoading = false }
+                networkCards = (try? await CardAPIService.fetchCardRegistry()) ?? []
+            }
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">🌐</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>My card collecting app pulled real-time card listings from an external REST platform using URLSession endpoints, parsing standard schemas straight into structured TradingCard structs. Concurrently, a custom UIViewRepresentable WebView wrapper loaded external market authentication metrics or auction sites directly inside the application workspace.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 8 ─── -->
+    <section class="topic" id="t8">
+      <div class="topic-header">
+        <span class="topic-num">08</span>
+        <div class="topic-title-block">
+          <h2>Maps — MapKit</h2>
+          <div class="topic-subtitle">Interactive maps &middot; Markers &middot; Annotations &middot; Routes</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>MapKit is Apple's framework for embedding interactive maps in iOS apps. The SwiftUI <code>Map</code> view (iOS 17+ API) accepts a <code>MapCameraPosition</code> binding that controls the viewport, and displays <code>Marker</code> and <code>Annotation</code> views at geographic coordinates. You can show the user's real-time location with <code>UserAnnotation</code>, draw route overlays with <code>MapPolyline</code>, and respond to map tap and item-selection events. MapKit tiles are powered by Apple Maps and automatically adapt to light and dark mode.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+import MapKit
+
+struct CardShopLocation: Identifiable {
+    let id = UUID()
+    let shopName:   String
+    let addressName: String
+    let coordinates: CLLocationCoordinate2D
+}
+
+struct CardShopMapView: View {
+    let retailOutlets: [CardShopLocation] = [
+        CardShopLocation(shopName: "Hobby Central Cards",
+                         addressName: "Downtown, Chihuahua",
+                         coordinates: .init(latitude: 28.6353, longitude: -106.0889)),
+        CardShopLocation(shopName: "Collector Cave",
+                         addressName: "North Zone, Chihuahua",
+                         coordinates: .init(latitude: 28.6500, longitude: -106.1050))
+    ]
+
+    @State private var positionFocus: MapCameraPosition = .automatic
+    @State private var selectedShopID: UUID?
+
+    var currentSelectedShop: CardShopLocation? {
+        retailOutlets.first { $0.id == selectedShopID }
+    }
+
+    var body: some View {
+        Map(position: $positionFocus, selection: $selectedShopID) {
+
+            // Device GPS anchor indicator
+            UserAnnotation()
+
+            // Map pin entries for hobby stores
+            ForEach(retailOutlets) { shop in
+                Marker(shop.shopName, coordinate: shop.coordinates)
+                    .tint(.blue)
+                    .tag(shop.id)
+            }
+        }
+        .mapControls {
+            MapCompass()
+            MapUserLocationButton()
+            MapScaleView()
+        }
+        .mapStyle(.standard(elevation: .realistic))
+        // Event sheet summary details layout overlay toggle
+        .safeAreaInset(edge: .bottom) {
+            if let shop = currentSelectedShop {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(shop.shopName).font(.headline)
+                        Text(shop.addressName).font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button("Plot Route") {
+                        openMapsAppRoute(to: shop)
+                    }
+                    .buttonStyle(.bordered)
+                }
+                .padding()
+                .background(.regularMaterial)
+            }
+        }
+        .ignoresSafeArea(edges: .top)
+    }
+
+    func openMapsAppRoute(to shop: CardShopLocation) {
+        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: shop.coordinates))
+        mapItem.name = shop.shopName
+        mapItem.openInMaps()
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">📍</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>The "Local Game Stores" module inside my application exposed authorized card vendor networks on an interactive map canvas. Tapping custom markers populated event metadata panels, detailing tournament coordinates or trading hours, with external route delegation managed by Apple Maps intent bindings.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 9 ─── -->
+    <section class="topic" id="t9">
+      <div class="topic-header">
+        <span class="topic-num">09</span>
+        <div class="topic-title-block">
+          <h2>Camera &amp; QR Reader</h2>
+          <div class="topic-subtitle">AVFoundation &middot; AVCaptureSession &middot; UIViewRepresentable</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p>iOS camera access is managed by <code>AVFoundation</code>. An <code>AVCaptureSession</code> wires together inputs (the camera device) and outputs (still images, video, or metadata). For QR reading, you add an <code>AVCaptureMetadataOutput</code> — the framework fires a delegate method every time a QR code or barcode is detected in the live camera frame. Because AVFoundation is a UIKit API, it must be wrapped in a <code>UIViewRepresentable</code> to bridge into SwiftUI. The camera permission key <code>NSCameraUsageDescription</code> must be added to <code>Info.plist</code>.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import SwiftUI
+import AVFoundation
+
+// ── UIViewRepresentable bridges AVFoundation → SwiftUI ─
+struct CardScannerView: UIViewRepresentable {
+    var onTokenDetected: (String) -&gt; Void
+
+    // Coordinator acts as the AVFoundation delegate
+    class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
+        let targetView: CardScannerView
+        init(_ viewInstance: CardScannerView) { self.targetView = viewInstance }
+
+        func metadataOutput(
+            _ output: AVCaptureMetadataOutput,
+            didOutput objects: [AVMetadataObject],
+            from connection: AVCaptureConnection
+        ) {
+            guard
+                let rawObj = objects.first as? AVMetadataMachineReadableCodeObject,
+                let valueString = rawObj.stringValue
+            else { return }
+
+            // Ensure UI actions run safely on the primary loop thread
+            DispatchQueue.main.async {
+                self.targetView.onTokenDetected(valueString)
+            }
+        }
+    }
+
+    func makeCoordinator() -&gt; Coordinator { Coordinator(self) }
+
+    func makeUIView(context: Context) -&gt; UIView {
+        let view          = UIView(frame: .zero)
+        let captureStream = AVCaptureSession()
+
+        guard
+            let cameraSource = AVCaptureDevice.default(for: .video),
+            let captureInput = try? AVCaptureDeviceInput(device: cameraSource),
+            captureStream.canAddInput(captureInput)
+        else { return view }
+
+        captureStream.addInput(captureInput)
+
+        let metadataPipeline = AVCaptureMetadataOutput()
+        captureStream.addOutput(metadataPipeline)
+        metadataPipeline.setMetadataObjectsDelegate(context.coordinator, queue: .main)
+        metadataPipeline.metadataObjectTypes = [.qr, .code128, .ean13]
+
+        // Video configuration layer context linkage
+        let renderingLayer = AVCaptureVideoPreviewLayer(session: captureStream)
+        renderingLayer.videoGravity = .resizeAspectFill
+        renderingLayer.frame = UIScreen.main.bounds
+        view.layer.addSublayer(renderingLayer)
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            captureStream.startRunning()
+        }
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
+}
+
+// ── SwiftUI screen that uses the scanner ──────────────
+struct InventoryScannerScreen: View {
+    @State private var registeredCode: String?
+    @State private var displayAlert = false
+
+    var body: some View {
+        ZStack {
+            CardScannerView { stringCode in
+                registeredCode = stringCode
+                displayAlert = true
+            }
+            .ignoresSafeArea()
+
+            // Viewfinder Target Graphic Box
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(.white, lineWidth: 2)
+                .frame(width: 240, height: 240)
+        }
+        .alert("Code Successfully Scanned", isPresented: $displayAlert) {
+            Button("Dismiss") {}
+        } message: {
+            Text("Decoded Token Data ID: \(registeredCode ?? "Unknown Card")")
+        }
+        .navigationTitle("Scan Card Code")
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">📷</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>My card collecting app included a high-speed scanner view to dynamically register physical items via serial codes or booster codes. Scanning serial stamps instantly fetched structural market card entries, automatically verifying collection authenticity metrics without manual field data tracking.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TOPIC 10 ─── -->
+    <section class="topic" id="t10">
+      <div class="topic-header">
+        <span class="topic-num">10</span>
+        <div class="topic-title-block">
+          <h2>CoreLocation</h2>
+          <div class="topic-subtitle">GPS &middot; Permissions &middot; CLLocation &middot; Distance</div>
+        </div>
+      </div>
+
+      <div class="what-it-is">
+        <div class="section-label">What it is</div>
+        <p><code>CoreLocation</code> gives iOS apps access to the device's geographic position using GPS, Wi-Fi triangulation, and cellular data. Before receiving any location, you must request user permission — either <em>when in use</em> (only while the app is open) or <em>always</em> (including when backgrounded). Updates are delivered via <code>CLLocationManagerDelegate</code> callbacks. You can compute the distance between two <code>CLLocation</code> objects with a single method call, or set up geofences (<code>CLCircularRegion</code>) that fire events when the user enters or exits an area. The required <code>Info.plist</code> key is <code>NSLocationWhenInUseUsageDescription</code>.</p>
+      </div>
+
+      <div class="section-label">Code Snippet</div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+          <span class="code-lang">swift</span>
+        </div>
+        <pre><code class="language-swift">import CoreLocation
+import SwiftUI
+
+// ── Observable wrapper around CLLocationManager ────────
+@Observable
+class UserLocationManager: NSObject, CLLocationManagerDelegate {
+    private let coreLocationService = CLLocationManager()
+    var lastRecordedLocation: CLLocation?
+    var permissionStatus: CLAuthorizationStatus = .notDetermined
+
+    override init() {
+        super.init()
+        coreLocationService.delegate = self
+        coreLocationService.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+    }
+
+    func requestDevicePermission() {
+        coreLocationService.requestWhenInUseAuthorization()
+    }
+
+    // Delegate — called when permission changes
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        permissionStatus = manager.authorizationStatus
+        if permissionStatus == .authorizedWhenInUse || permissionStatus == .authorizedAlways {
+            coreLocationService.startUpdatingLocation()
+        }
+    }
+
+    // Delegate — called with new GPS fix
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations positions: [CLLocation]) {
+        lastRecordedLocation = positions.last
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("GPS Stream Error: \(error.localizedDescription)")
+    }
+
+    // Utility: distance calculation metric output in meters
+    func measureMetresToTarget(targetCoords: CLLocationCoordinate2D) -&gt; Double? {
+        guard let currentAnchor = lastRecordedLocation else { return nil }
+        let targetSpot = CLLocation(latitude: targetCoords.latitude, longitude: targetCoords.longitude)
+        return currentAnchor.distance(from: targetSpot)
+    }
+}
+
+// ── View: show nearest trade meetup store ─────────────
+struct ClosestStoreView: View {
+    @State private var locationService = UserLocationManager()
+    let retailNetworks = CardShopLocation.samples
+
+    var closestShop: CardShopLocation? {
+        retailNetworks.min {
+            (locationService.measureMetresToTarget(targetCoords: $0.coordinates) ?? .infinity) &lt;
+            (locationService.measureMetresToTarget(targetCoords: $1.coordinates) ?? .infinity)
+        }
+    }
+
+    var body: some View {
+        VStack(spacing: 24) {
+            if locationService.permissionStatus == .notDetermined {
+                Button("Authorize Location Tracking") {
+                    locationService.requestDevicePermission()
+                }
+                .buttonStyle(.borderedProminent)
+            } else if let shop = closestShop,
+                      let rangeDist = locationService.measureMetresToTarget(targetCoords: shop.coordinates) {
+                VStack(spacing: 6) {
+                    Text("Closest Local Trading Spot").font(.caption).foregroundStyle(.secondary)
+                    Text(shop.shopName).font(.title2.bold())
+                    Text(String(format: "%.0f meters from current location", rangeDist))
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                ProgressView("Calibrating device GPS metrics…")
+            }
+        }
+        .onAppear { locationService.requestDevicePermission() }
+        .padding()
+    }
+}</code></pre>
+      </div>
+
+      <div class="use-case">
+        <span class="use-case-icon">🧭</span>
+        <div class="use-case-content">
+          <div class="use-case-label">Real Use Case</div>
+          <p>My card collecting app processed active coordinates through CoreLocation to automatically highlight regional tournament events or card trading hubs based on proximate distance matrix queries. Arranging location results sorted nearest community meetups dynamically using relative user range metrics.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <p>iOS Dev Quick Guide 101 &middot; <strong>F&eacute;lix Neder</strong> &middot; Universidad La Salle Chihuahua</p>
+  <p>Mobile Programming 2 &middot; Final Exam &middot; Week 16 &middot; 2026</p>
+</footer>
+
+<script>
+  // Syntax highlighting
+  hljs.highlightAll();
+
+  // Active sidebar link — highlight as user scrolls
+  const sections = document.querySelectorAll('.topic');
+  const links    = document.querySelectorAll('#toc a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`#toc a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.35 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
