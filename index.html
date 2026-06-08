@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iOS Dev Quick Guide 101 — Neder</title>
+  <title>Chilechilo Cards — iOS swift guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -340,25 +340,25 @@
 ════════════════════════════════════════════════ -->
 <header class="site-header">
   <div class="header-inner">
-    <div class="header-tag">Mobile Programming 2 &middot; Final Exam &middot; Week 16</div>
-    <h1>iOS Dev Quick<br>Guide <span>101</span></h1>
-    <p class="header-desc">A personal reference guide covering 10 core topics from the course — written as both a study resource and a portfolio piece.</p>
+    <div class="header-tag">SwiftUI &middot; Firebase &middot; iOS Native</div>
+    <h1>iOs<br>swift <span>Guide</span></h1>
+    <p class="header-desc">A technical walkthrough of a real-world iOS collectible card trading app. Features Chilean cultural figures, Firebase real-time sync, pack opening mechanics, and a coin-based economy.</p>
     <div class="header-meta">
       <div class="header-meta-item">
-        <span class="label">Author</span>
-        <span class="value">F&eacute;lix Neder</span>
+        <span class="label">Project Type</span>
+        <span class="value">iOS App (SwiftUI)</span>
       </div>
       <div class="header-meta-item">
-        <span class="label">Institution</span>
-        <span class="value">Universidad La Salle Chihuahua</span>
+        <span class="label">Backend</span>
+        <span class="value">Firebase (Auth + Firestore)</span>
       </div>
       <div class="header-meta-item">
         <span class="label">Year</span>
         <span class="value">2026</span>
       </div>
       <div class="header-meta-item">
-        <span class="label">Topics covered</span>
-        <span class="value">10 of 17</span>
+        <span class="label">Core Modules</span>
+        <span class="value">10 topics</span>
       </div>
     </div>
   </div>
@@ -371,12 +371,12 @@
     <div class="sidebar-title">Contents</div>
     <nav id="toc">
       <a href="#t1" class="active"><span class="num">01</span>Swift Basics</a>
-      <a href="#t2"><span class="num">02</span>OOP</a>
-      <a href="#t3"><span class="num">03</span>SwiftUI</a>
-      <a href="#t4"><span class="num">04</span>MVVM + @Observable</a>
+      <a href="#t2"><span class="num">02</span>OOP &amp; Models</a>
+      <a href="#t3"><span class="num">03</span>SwiftUI UI</a>
+      <a href="#t4"><span class="num">04</span>MVVM + Firebase</a>
       <a href="#t5"><span class="num">05</span>Navigation</a>
-      <a href="#t6"><span class="num">06</span>Lists &amp; Tables</a>
-      <a href="#t7"><span class="num">07</span>HTTP &amp; JSON</a>
+      <a href="#t6"><span class="num">06</span>Collections</a>
+      <a href="#t7"><span class="num">07</span>Firestore &amp; Data</a>
       <a href="#t8"><span class="num">08</span>MapKit</a>
       <a href="#t9"><span class="num">09</span>Camera &amp; QR</a>
       <a href="#t10"><span class="num">10</span>CoreLocation</a>
@@ -407,43 +407,38 @@
           <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
           <span class="code-lang">swift</span>
         </div>
-        <pre><code class="language-swift">// Constants and variables
-let appName: String = "CardVault"    // immutable
-var cardCount: Int = 0              // mutable
+        <pre><code class="language-swift">// Constants and variables from AppUser model
+let appName: String = "Chilechilo Cards"    // immutable
+var coinBalance: Int = 0                     // mutable coin count
 
 // Type inference — compiler deduces the type
-var marketValue = 45.00             // Double
-var isGraded = false                // Bool
+var lastPackTime = Date()                    // Date
+var canOpenFree = false                      // Bool
 
-// Optionals — a value that might be nil
-var cardOwner: String? = nil
-cardOwner = "neder_dev"
+// Optionals — a value that might be nil (card image URLs)
+var cardImageURL: String? = nil
+cardImageURL = "https://storage.chilechilo.com/cards/gobernador.jpg"
 
 // Safe unwrapping — guard lets you exit early
-func greetOwner(_ name: String?) -&gt; String {
+func displayCard(_ name: String?) -&gt; String {
     guard let name = name else {
-        return "Welcome, guest collector!"
+        return "Unknown Chilean figure"
     }
-    return "Vault accessed by: \(name)!"
+    return "Tarjeta: \(name)"
 }
 
 // nil coalescing — provide a fallback
-let display = cardOwner ?? "Anonymous Collector"   // "neder_dev"
+let displayName = cardImageURL ?? "placeholder_card.png"
 
-// Closure — a block you can assign and pass
-let doubleValue: (Int) -&gt; Int = { v in v * 2 }
-print(doubleValue(50))   // 100
+// Closure — filter rarity cards
+let allCardRarities = ["bronze", "silver", "gold", "platinum"]
+let rarePulls = allCardRarities.filter { $0 == "gold" || $0 == "platinum" }
+print(rarePulls)   // ["gold", "platinum"]
 
-// Trailing closure syntax (used everywhere in SwiftUI)
-let prices = [12.5, 250.0, 4.75, 120.0]
-let premiumCards = prices.filter { $0 &gt; 50.0 }
-print(premiumCards)   // [250.0, 120.0]
-
-// async/await — modern concurrency
-func fetchCardData() async throws -&gt; Data {
-    let url = URL(string: "https://api.example.com/cards")!
-    let (data, _) = try await URLSession.shared.data(from: url)
-    return data
+// async/await — modern concurrency in Firestore
+func fetchAllChileanCards() async throws -&gt; [Card] {
+    let snapshot = try await db.collection("cards").getDocuments()
+    return snapshot.documents.compactMap { try? $0.data(as: Card.self) }
 }</code></pre>
       </div>
 
@@ -451,7 +446,7 @@ func fetchCardData() async throws -&gt; Data {
         <span class="use-case-icon">🃏</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>Every line of my card collecting app is Swift. Optionals handled missing fields in the JSON (like a card illustration URL or grading subgrades that might be absent), closures powered button callbacks and sorting parameters, and async/await made network calls to the trading card database API clean and readable without nested callbacks.</p>
+          <p>Chilechilo Cards is entirely written in Swift. Optionals handle missing image URLs and optional user data fields, closures power pack-opening animations and card filtering, and async/await manages Firestore queries seamlessly. The AppUser model uses optionals for lastPackOpened to check if a free pack timer is valid.</p>
         </div>
       </div>
     </section>
@@ -477,70 +472,60 @@ func fetchCardData() async throws -&gt; Data {
           <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
           <span class="code-lang">swift</span>
         </div>
-        <pre><code class="language-swift">// Protocol — a contract any type can adopt
-protocol Displayable {
-    var displayName: String { get }
-    func describe() -&gt; String
-}
+        <pre><code class="language-swift">// Struct — the core Card model from Firestore
+import Foundation
+import FirebaseFirestore
 
-// Enum — fixed named cases (with raw value)
-enum CardType: String, CaseIterable {
-    case creature = "Creature"
-    case spell    = "Spell"
-    case energy   = "Energy"
-}
-
-// Struct — value type, conforms to protocols
-struct TradingCard: Displayable, Identifiable, Codable {
-    let id: UUID
+struct Card: Identifiable, Codable {
+    @DocumentID var id: String?
     var name: String
-    var marketPrice: Double
-    var type: CardType
-
-    // Computed property
-    var displayName: String { name }
-    func describe() -&gt; String {
-        "\(name) (\(type.rawValue)) — $\(marketPrice)"
-    }
+    var rarity: String = "bronze"
+    var imageURL: String = "placeholder"
 }
 
-// Class — reference type, shared mutable state
-class CardBinder {
-    private(set) var cards: [TradingCard] = []
-
-    func add(_ card: TradingCard) {
-        guard !cards.contains(where: { $0.id == card.id }) else { return }
-        cards.append(card)
-    }
-
-    func remove(_ card: TradingCard) {
-        cards.removeAll { $0.id == card.id }
-    }
-
-    var totalPortfolioValue: Double {
-        cards.reduce(0.0) { $0 + $1.marketPrice }
-    }
+// Struct for user-owned cards (count tracking)
+struct UserCard: Identifiable, Codable {
+    var id: String
+    var count: Int
 }
 
-// Usage
-let rareMonster = TradingCard(id: UUID(), name: "Cyber Dragon",
-                              marketPrice: 89.99, type: .creature)
-let binder = CardBinder()
-binder.add(rareMonster)
-print(binder.totalPortfolioValue)     // 89.99
-print(rareMonster.describe())         // Cyber Dragon (Creature) — $89.99
+// Enum — rarity tiers with associated colors
+enum Rarity: String, CaseIterable {
+    case bronze = "Bronze"
+    case silver = "Silver"
+    case gold = "Gold"
+    case platinum = "Platinum"
+}
 
-// Struct is copied — binder portfolio is NOT affected
-var cardCopy = rareMonster
-cardCopy.marketPrice = 9999.0
-print(binder.totalPortfolioValue)     // still 89.99</code></pre>
+// Class — AppUser model for authentication state
+struct AppUser: Codable {
+    var email: String
+    var coins: Int
+    var lastPackOpened: Date
+}
+
+// Usage in CollectionViewModel
+let chilechilo_gobernador = Card(
+    id: "1",
+    name: "Gobernador de Chilechilo",
+    rarity: "gold",
+    imageURL: "https://storage.com/gobernador.jpg"
+)
+
+let owned = UserCard(id: "1", count: 2)  // User has 2 copies
+print("Owns \(owned.count) × \(chilechilo_gobernador.name)")  // Owns 2 × Gobernador
+
+// Struct is value type — each collection view gets its own copy
+var displayCard = chilechilo_gobernador
+displayCard.name = "Foil " + displayCard.name  // Doesn't affect original
+print(chilechilo_gobernador.name)  // Still "Gobernador de Chilechilo"</code></pre>
       </div>
 
       <div class="use-case">
         <span class="use-case-icon">🏗️</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>In my card collecting app, TradingCard was a struct (safe to copy and display inside UI cells), while CardBinder was a class (one shared inventory instance passed throughout the app). CardType was an enum so SwiftUI's ForEach could cleanly iterate all cases to build type-based filter tabs. Identifiable and Codable were protocols required by SwiftUI lists and JSON decoders automatically.</p>
+          <p>In Chilechilo Cards, Card is a struct with @DocumentID (safe to copy inside SwiftUI cells and decodable from Firestore), UserCard tracks owned counts by ID, and Rarity is an enum for filtering rarity tiers. AppUser is a simple Codable struct synced from Firestore. Identifiable and Codable protocols are required by SwiftUI's List and Firestore's automatic JSON decoding.</p>
         </div>
       </div>
     </section>
@@ -550,7 +535,7 @@ print(binder.totalPortfolioValue)     // still 89.99</code></pre>
       <div class="topic-header">
         <span class="topic-num">03</span>
         <div class="topic-title-block">
-          <h2>SwiftUI — Views, Layouts &amp; Modifiers</h2>
+          <h2>SwiftUI — Building the Chilechilo UI</h2>
           <div class="topic-subtitle">Declarative UI &middot; Stacks &middot; State &middot; Composition</div>
         </div>
       </div>
@@ -568,73 +553,72 @@ print(binder.totalPortfolioValue)     // still 89.99</code></pre>
         </div>
         <pre><code class="language-swift">import SwiftUI
 
-struct TradingCardView: View {
-    let card: TradingCard
-    @State private var isWishlisted = false
+struct CardRowView: View {
+    let card: Card
+    @State private var isFavorited = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
 
-            // Hero artwork area
+            // Card image from Firestore URL
             ZStack(alignment: .topTrailing) {
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(Color(.systemGray6))
-                    .frame(height: 180)
+                AsyncImage(url: URL(string: card.imageURL)) { image in
+                    image.resizable().scaledToFill()
+                } placeholder: {
+                    Color.gray.opacity(0.3)
+                }
+                .frame(height: 200)
+                .clipped()
+                .cornerRadius(12)
 
-                Image(systemName: card.type == .creature
-                      ? "shield.fill" : "wand.and.stars")
-                    .font(.system(size: 44))
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                // Rarity / Type badge
-                Text(card.type.rawValue)
-                    .font(.caption2.weight(.semibold))
+                // Rarity badge (bronze/silver/gold/platinum)
+                Text(card.rarity.uppercased())
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.white)
                     .padding(.horizontal, 8).padding(.vertical, 4)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(10)
+                    .background(rarityColor(card.rarity))
+                    .cornerRadius(6)
+                    .padding(8)
             }
 
-            // Text block
-            VStack(alignment: .leading, spacing: 3) {
+            // Card name and rarity
+            VStack(alignment: .leading, spacing: 4) {
                 Text(card.name)
-                    .font(.headline)
+                    .font(.headline.weight(.semibold))
                     .foregroundStyle(.primary)
-                Text(card.describe())
+                Text(card.rarity)
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
             }
 
-            // Price + action row
-            HStack(alignment: .center) {
-                Text("$\(card.marketPrice, specifier: "%.2f")")
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(.blue)
-
+            // Favorite toggle
+            HStack {
                 Spacer()
-
                 Button {
-                    withAnimation(.spring(response: 0.3)) {
-                        isWishlisted.toggle()
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isFavorited.toggle()
                     }
                 } label: {
-                    Label(
-                        isWishlisted ? "Saved" : "Wishlist",
-                        systemImage: isWishlisted
-                            ? "heart.fill"
-                            : "heart"
-                    )
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(isWishlisted ? .red : .blue)
+                    Image(systemName: isFavorited ? "star.fill" : "star")
+                        .foregroundStyle(isFavorited ? .yellow : .gray)
                 }
-                .buttonStyle(.plain)
             }
         }
-        .padding(16)
+        .padding(12)
         .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .shadow(color: .black.opacity(0.09), radius: 10, y: 5)
+        .cornerRadius(12)
+        .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
+    }
+
+    func rarityColor(_ rarity: String) -&gt; Color {
+        switch rarity.lowercased() {
+        case "bronze": return .brown
+        case "silver": return .gray
+        case "gold": return .yellow
+        case "platinum": return .cyan
+        default: return .blue
+        }
+    }
     }
 }</code></pre>
       </div>
@@ -643,7 +627,7 @@ struct TradingCardView: View {
         <span class="use-case-icon">📱</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>Every screen in my card collecting app was built with SwiftUI. The main showcase screen used a LazyVGrid of TradingCardViews. The card detail view used a ScrollView with a ZStack for displaying holographic overlays. All styling was done through modifier chains — no Interface Builder, no storyboards. @State on isWishlisted caused the heart button to re-render automatically with the appropriate icon fill and red tint on every tap.</p>
+          <p>Every screen in Chilechilo Cards is built with SwiftUI. The collection view uses a List of CardRowViews fetched from Firestore. AsyncImage loads card artwork URLs directly from cloud storage. All styling through modifier chains with dynamic rarity-based colors. @State on isFavorited causes the star button to re-render automatically on each tap.</p>
         </div>
       </div>
     </section>
@@ -653,14 +637,14 @@ struct TradingCardView: View {
       <div class="topic-header">
         <span class="topic-num">04</span>
         <div class="topic-title-block">
-          <h2>MVVM + @Observable</h2>
-          <div class="topic-subtitle">Architecture &middot; Separation of concerns &middot; Reactive state</div>
+          <h2>MVVM + Firebase</h2>
+          <div class="topic-subtitle">Architecture &middot; Firestore sync &middot; Observable state</div>
         </div>
       </div>
 
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>Model-View-ViewModel (MVVM) is an architecture pattern that separates code into three layers. The <strong>Model</strong> holds raw data. The <strong>ViewModel</strong> contains business logic, transforms data for display, and handles async work. The <strong>View</strong> simply renders what the ViewModel exposes — no logic lives there. In iOS 17+, the <code>@Observable</code> macro replaces the older <code>@ObservableObject + @Published</code> pattern. It automatically tracks which properties each View reads and triggers UI updates only when those specific values change — more granular and more efficient.</p>
+        <p>Model-View-ViewModel (MVVM) is an architecture pattern that separates code into three layers. The <strong>Model</strong> holds raw data. The <strong>ViewModel</strong> contains business logic, fetches from Firestore, and transforms data for display. The <strong>View</strong> simply renders what the ViewModel exposes — no logic lives there. In iOS 17+, <code>@ObservableObject + @Published</code> automatically notifies SwiftUI when state changes.</p>
       </div>
 
       <div class="section-label">Code Snippet</div>
@@ -670,40 +654,44 @@ struct TradingCardView: View {
           <span class="code-lang">swift</span>
         </div>
         <pre><code class="language-swift">import SwiftUI
-import Observation
+import Combine
+import FirebaseFirestore
 
-// ── ViewModel — all business logic lives here ──────────
-@Observable
-class BinderViewModel {
-    var cards:     [TradingCard] = []
-    var isLoading: Bool          = false
-    var errorMessage: String?
+// ── CollectionViewModel — loads cards & owned status ──────
+@MainActor
+class CollectionViewModel: ObservableObject {
+    @Published var allCards: [Card] = []
+    @Published var ownedIds: Set<String> = []
+    @Published var ownedCounts: [String: Int] = [:]
+    
+    private let manager = FirestoreManager()
 
     // Derived state — computed from cards
-    var totalValue: Double { cards.reduce(0) { $0 + $1.marketPrice } }
-    var cardCount:  Int    { cards.count }
-    var isEmpty:    Bool   { cards.isEmpty }
+    var cardCount: Int { ownedIds.count }
+    var isEmpty: Bool { ownedIds.isEmpty }
 
-    func add(_ card: TradingCard) {
-        guard !cards.contains(where: { $0.id == card.id }) else { return }
-        cards.append(card)
-    }
-
-    func remove(_ card: TradingCard) {
-        cards.removeAll { $0.id == card.id }
-    }
-
-    func clearBinder() { cards.removeAll() }
-
-    func syncWithCloud() async {
-        isLoading = true
-        defer { isLoading = false }
+    func load() async {
         do {
-            let collectionData = CollectionPayload(cards: cards)
-            let _ = try await CardAPIService.syncCollection(collectionData)
+            allCards = try await manager.fetchAllCards()
+            let owned = try await manager.fetchOwnedCards()
+            ownedIds = Set(owned.map { $0.id })
+            ownedCounts = Dictionary(
+                uniqueKeysWithValues: owned.map { ($0.id, $0.count) }
+            )
         } catch {
-            errorMessage = error.localizedDescription
+            print("Error loading collection: \(error)")
         }
+    }
+
+    func addCard(_ card: Card) {
+        guard let cardId = card.id else { return }
+        ownedIds.insert(cardId)
+        ownedCounts[cardId, default: 0] += 1
+    }
+
+    func removeCard(withId id: String) {
+        ownedIds.remove(id)
+        ownedCounts.removeValue(forKey: id)
     }
 }
 
@@ -765,7 +753,7 @@ struct BinderView: View {
         <span class="use-case-icon">🔁</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>BinderViewModel handled all add/remove logic, portfolio value calculations, and the async cloud synchronization request — none of that structural math lived in the View layer. BinderView just observed properties from the view model and rendered UI updates accordingly. This separation made it incredibly simple to test inventory computations detached from visual layouts.</p>
+          <p>CollectionViewModel handles all Firestore queries, owned card tracking, and collection statistics. The View layer only renders and dispatches events. This separation allows testing card-fetching logic independently of UI presentation, and makes swapping the backend trivial.</p>
         </div>
       </div>
     </section>
@@ -793,67 +781,59 @@ struct BinderView: View {
         </div>
         <pre><code class="language-swift">import SwiftUI
 
-// ── Root: TabView with three sections ─────────────────
-struct AppRootView: View {
-    @State private var selectedTab = 0
+// ── Root: HomeView with TabView ────────────────────────
+struct HomeView: View {
+    @StateObject private var packVM = PackViewModel()
+    @StateObject private var colVM = CollectionViewModel()
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            CollectionTab()
-                .tabItem { Label("Collection", systemImage: "square.stack.fill") }
-                .tag(0)
+        TabView {
+            // Pack opening tab
+            VStack(spacing: 30) {
+                Text("🌶️ Chilechilo Cards")
+                    .font(.largeTitle.bold())
 
-            WishlistTab()
-                .tabItem { Label("Wishlist",   systemImage: "heart.fill") }
-                .tag(1)
+                Text("🪙 \(packVM.coins) monedas")
+                    .font(.title2)
 
-            ProfileTab()
-                .tabItem { Label("Profile",    systemImage: "person.circle") }
-                .tag(2)
+                Button("Abrir paquete gratis") {
+                    Task { await packVM.openPack() }
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .tabItem { Label("Inicio", systemImage: "house.fill") }
+
+            // Collection tab
+            CollectionView()
+                .tabItem { Label("Colección", systemImage: "square.grid.2x2.fill") }
+
+            // Profile tab
+            ProfileView()
+                .tabItem { Label("Perfil", systemImage: "person.fill") }
+            
+            // Location tab
+            LocationView()
+                .tabItem { Label("Ubicación", systemImage: "location.fill") }
         }
     }
 }
 
-// ── Collection tab — NavigationStack for drill-down ───
-struct CollectionTab: View {
-    let inventory: [TradingCard] = TradingCard.samples
-
+// ── Each tab maintains its own navigation stack ──────────
+struct ProfileView: View {
+    @EnvironmentObject var auth: AuthManager
+    
     var body: some View {
         NavigationStack {
-            List(inventory) { card in
-                // Value-based link — pushes when tapped
-                NavigationLink(value: card) {
-                    CardRowView(card: card)
-                }
-            }
-            .navigationTitle("Main Vault")
-            .navigationBarTitleDisplayMode(.large)
-            // Maps a TradingCard value → a destination view
-            .navigationDestination(for: TradingCard.self) { card in
-                CardDetailView(card: card)
-            }
-        }
-    }
-}
-
-// ── Programmatic navigation with a path ───────────────
-struct CollectionWithPathView: View {
-    @State private var navigationPath = NavigationPath()
-
-    var body: some View {
-        NavigationStack(path: $navigationPath) {
             VStack(spacing: 16) {
-                Button("Inspect Secret Rare Card") {
-                    navigationPath.append(TradingCard.exampleRare)
+                Text("Mi Perfil")
+                    .font(.title.bold())
+                
+                Button("Cerrar sesión") {
+                    auth.logout()
                 }
-                Button("Return to Library Root") {
-                    navigationPath.removeLast(navigationPath.count)
-                }
+                .buttonStyle(.bordered)
             }
-            .navigationTitle("Vault Dashboard")
-            .navigationDestination(for: TradingCard.self) { c in
-                CardDetailView(card: c)
-            }
+            .navigationTitle("Profile")
         }
     }
 }</code></pre>
@@ -863,7 +843,7 @@ struct CollectionWithPathView: View {
         <span class="use-case-icon">🗺️</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>My card collecting app used a TabView configuration containing three core views: Collection, Wishlist, and Profile. The Collection tab embedded a value-driven NavigationStack, ensuring that tapping individual cards safely pushed a dedicated CardDetailView to inspect grading details and market history. Value-based navigation states make deep-linking direct card scans effortless.</p>
+          <p>Chilechilo Cards uses TabView with four root tabs: pack opening (Inicio), collection (Colección), profile (Perfil), and locations (Ubicación). Each tab maintains its own NavigationStack independently. TabView + NavigationStack is the standard pattern for most iOS apps and handles deep linking and restoration cleanly.</p>
         </div>
       </div>
     </section>
@@ -955,7 +935,7 @@ struct CardBinderListView: View {
         <span class="use-case-icon">📋</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>The main library inventory in my app utilized an inset-grouped List layout split cleanly into card categories (Creatures, Spells, Energies). Left-swipe shortcuts dropped items straight into a deck planner, while right swipes purged items from local collections. Incorporating .searchable allowed collectors to narrow down thousands of indexed cards dynamically.</p>
+          <p>Chilechilo Cards groups owned cards by rarity (Platinum, Gold, Silver, Bronze) for easy browsing. Left-swipe removes duplicates from the collection. The .searchable modifier allows players to search by card name in real time. Pull-to-refresh reloads owned cards from Firestore.</p>
         </div>
       </div>
     </section>
@@ -965,14 +945,14 @@ struct CardBinderListView: View {
       <div class="topic-header">
         <span class="topic-num">07</span>
         <div class="topic-title-block">
-          <h2>WebView &amp; HTTP — REST / JSON</h2>
-          <div class="topic-subtitle">URLSession &middot; Codable &middot; async/await &middot; WKWebView</div>
+          <h2>Firestore &amp; Real-Time Data</h2>
+          <div class="topic-subtitle">Codable &middot; async/await &middot; Document queries &middot; Auth sync</div>
         </div>
       </div>
 
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>Most iOS apps talk to a backend via HTTP REST APIs. Apple's <code>URLSession</code> handles all network requests; with Swift's <code>async/await</code>, calls are linear and readable. JSON responses map to Swift types automatically using the <code>Codable</code> protocol — just conform your model and <code>JSONDecoder</code> handles the conversion. POST requests send encoded Swift types as JSON bodies. <code>WKWebView</code> (wrapped in a <code>UIViewRepresentable</code>) embeds a full web browser inside a native SwiftUI view, useful for terms pages, external content, or hybrid web features.</p>
+        <p>Firebase Firestore is a cloud NoSQL database accessed directly from iOS apps via the Firebase SDK. Collections hold documents (JSON-like objects) that are automatically decoded into Swift <code>Codable</code> types. Queries are written in a type-safe builder API and return results asynchronously via <code>async/await</code>. Security rules define read/write access. Unlike REST APIs where you manually sync, Firestore can push real-time updates to listeners, keeping the UI automatically in sync with the backend.</p>
       </div>
 
       <div class="section-label">Code Snippet</div>
@@ -982,72 +962,67 @@ struct CardBinderListView: View {
           <span class="code-lang">swift</span>
         </div>
         <pre><code class="language-swift">import SwiftUI
-import WebKit
+import FirebaseFirestore
+import FirebaseAuth
 
-// ── 1. Codable model — maps JSON keys automatically ───
-struct TradingCard: Codable, Identifiable {
-    let id:          Int
-    let name:        String
-    let marketPrice: Double
-    let type:        String
-    let imageURL:    String?
+// ── 1. Firestore manager — centralized data access ────
+@MainActor
+class FirestoreManager: ObservableObject {
+    private let db = Firestore.firestore()
 
-    enum CodingKeys: String, CodingKey {
-        case id, name, type
-        case marketPrice = "market_price" // snake_case → camelCase
-        case imageURL    = "image_url"
+    // GET — fetch all Chilean cards from Firestore collection
+    func fetchAllCards() async throws -&gt; [Card] {
+        let snapshot = try await db.collection("cards").getDocuments()
+        print("📦 Found \(snapshot.documents.count) cards")
+        return snapshot.documents.compactMap { try? $0.data(as: Card.self) }
+    }
+
+    // GET — fetch user's owned cards and counts
+    func fetchOwnedCards() async throws -&gt; [UserCard] {
+        guard let uid = Auth.auth().currentUser?.uid else { return [] }
+        let snapshot = try await db.collection("userCards")
+            .document(uid)
+            .collection("owned")
+            .getDocuments()
+        return try snapshot.documents.compactMap { try $0.data(as: UserCard.self) }
     }
 }
 
-// ── 2. Network service layer ──────────────────────────
-struct CardAPIService {
-    private static let baseURL = "https://api.cardvault.com/v1"
+// ── 2. Authentication manager with Firestore ──────────
+class AuthManager: ObservableObject {
+    @Published var isLoggedIn = false
+    private let db = Firestore.firestore()
 
-    // GET — decode global registry database array
-    static func fetchCardRegistry() async throws -&gt; [TradingCard] {
-        let url = URL(string: "\(baseURL)/cards")!
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard (response as? HTTPURLResponse)?.statusCode == 200
-        else { throw URLError(.badServerResponse) }
-        return try JSONDecoder().decode([TradingCard].self, from: data)
+    func register(email: String, password: String) async throws {
+        let result = try await Auth.auth().createUser(withEmail: email, password: password)
+        try await createUserDocument(uid: result.user.uid, email: email)
+        await MainActor.run { isLoggedIn = true }
     }
 
-    // POST — upload local collection contents to server registry
-    static func syncCollection(_ payload: CollectionPayload) async throws -&gt; SyncReceipt {
-        var request = URLRequest(url: URL(string: "\(baseURL)/sync")!)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONEncoder().encode(payload)
-        let (data, _) = try await URLSession.shared.data(for: request)
-        return try JSONDecoder().decode(SyncReceipt.self, from: data)
+    private func createUserDocument(uid: String, email: String) async throws {
+        let data: [String: Any] = [
+            "email": email,
+            "coins": 0,
+            "lastPackOpened": Timestamp(date: Date(timeIntervalSince1970: 0))
+        ]
+        try await db.collection("users").document(uid).setData(data)
+        print("✅ User document created in Firestore")
     }
 }
 
-// ── 3. WKWebView in SwiftUI (Used for official pricing rulebooks)
-struct TCGWebView: UIViewRepresentable {
-    let siteURL: URL
-
-    func makeUIView(context: Context) -&gt; WKWebView {
-        let webView = WKWebView()
-        webView.load(URLRequest(url: siteURL))
-        return webView
-    }
-    func updateUIView(_ uiView: WKWebView, context: Context) {}
-}
-
-// ── 4. View that fetches on appear ────────────────────
-struct DatabaseView: View {
-    @State private var networkCards: [TradingCard] = []
-    @State private var itemsLoading = false
+// ── 3. View that loads Firestore data ────────────────
+struct CollectionView: View {
+    @StateObject private var colVM = CollectionViewModel()
 
     var body: some View {
-        List(networkCards) { card in Text(card.name) }
-            .overlay { if itemsLoading { ProgressView() } }
-            .task {
-                itemsLoading = true
-                defer { itemsLoading = false }
-                networkCards = (try? await CardAPIService.fetchCardRegistry()) ?? []
+        List {
+            ForEach(colVM.allCards) { card in
+                Text(card.name)
             }
+        }
+        .task {
+            await colVM.load()  // Fetch from Firestore
+        }
     }
 }</code></pre>
       </div>
@@ -1056,7 +1031,7 @@ struct DatabaseView: View {
         <span class="use-case-icon">🌐</span>
         <div class="use-case-content">
           <div class="use-case-label">Real Use Case</div>
-          <p>My card collecting app pulled real-time card listings from an external REST platform using URLSession endpoints, parsing standard schemas straight into structured TradingCard structs. Concurrently, a custom UIViewRepresentable WebView wrapper loaded external market authentication metrics or auction sites directly inside the application workspace.</p>
+          <p>Chilechilo Cards uses Firebase Firestore for all data persistence. FirestoreManager handles querying the global card registry and user-owned cards. AuthManager automatically creates a Firestore user document on signup with initial coin balance. All data is decoded directly into Codable Swift models (Card, UserCard, AppUser).</p>
         </div>
       </div>
     </section>
@@ -1405,8 +1380,8 @@ struct ClosestStoreView: View {
 
 <!-- ═══ FOOTER ═══ -->
 <footer class="site-footer">
-  <p>iOS Dev Quick Guide 101 &middot; <strong>F&eacute;lix Neder</strong> &middot; Universidad La Salle Chihuahua</p>
-  <p>Mobile Programming 2 &middot; Final Exam &middot; Week 16 &middot; 2026</p>
+  <p>🌶️ Chilechilo Cards — SwiftUI + Firebase iOS Application</p>
+  <p>Built with SwiftUI &middot; Firebase Auth &middot; Firestore &middot; MapKit &middot; 2026</p>
 </footer>
 
 <script>
