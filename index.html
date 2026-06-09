@@ -3,390 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chilechilo Cards — iOS swift guide</title>
+  <title>iOS Dev Quick Guide 101 — Neder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #0B0B16;
-      --surface: #12121F;
-      --card: #18182A;
-      --border: rgba(255,255,255,0.07);
-      --text: #E2E2F0;
-      --muted: #5A5A80;
-      --accent: #0A84FF;
-      --green: #30D158;
-      --purple: #BF5AF2;
-      --sidebar-w: 260px;
+      --bg: #0B0B16; --surface: #12121F; --border: rgba(255,255,255,0.07);
+      --text: #E2E2F0; --muted: #5A5A80; --accent: #0A84FF;
+      --green: #30D158; --purple: #BF5AF2; --sidebar-w: 260px;
     }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
-      min-height: 100vh;
-    }
-
-    /* ── HEADER ── */
-    .site-header {
-      position: relative;
-      padding: 72px 56px 64px;
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-      background: var(--surface);
-    }
-    .site-header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(10,132,255,0.09) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 5%  80%, rgba(191,90,242,0.06) 0%, transparent 60%);
-      pointer-events: none;
-    }
-    .site-header::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-      background-size: 44px 44px;
-      pointer-events: none;
-    }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.7; min-height: 100vh; }
+    .site-header { position: relative; padding: 72px 56px 64px; border-bottom: 1px solid var(--border); overflow: hidden; background: var(--surface); }
+    .site-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(10,132,255,0.09) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 5% 80%, rgba(191,90,242,0.06) 0%, transparent 60%); pointer-events: none; }
+    .site-header::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px); background-size: 44px 44px; pointer-events: none; }
     .header-inner { position: relative; z-index: 1; max-width: 860px; }
-
-    .header-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-      padding: 6px 14px;
-      border: 1px solid rgba(10,132,255,0.3);
-      border-radius: 4px;
-      background: rgba(10,132,255,0.08);
-    }
-    .header-tag::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: var(--accent);
-      border-radius: 50%;
-      animation: blink 2s ease-in-out infinite;
-    }
+    .header-tag { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 28px; padding: 6px 14px; border: 1px solid rgba(10,132,255,.3); border-radius: 4px; background: rgba(10,132,255,.08); }
+    .header-tag::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
-
-    .site-header h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.2rem, 5.5vw, 4rem);
-      font-weight: 800;
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-      color: #fff;
-      margin-bottom: 12px;
-    }
+    .site-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 5.5vw, 4rem); font-weight: 800; line-height: 1.08; letter-spacing: -.025em; color: #fff; margin-bottom: 12px; }
     .site-header h1 span { color: var(--accent); }
-
-    .header-desc {
-      font-size: 15px;
-      color: var(--muted);
-      max-width: 560px;
-      margin-bottom: 32px;
-    }
-
-    .header-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 32px;
-    }
+    .header-desc { font-size: 15px; color: var(--muted); max-width: 560px; margin-bottom: 32px; }
+    .header-meta { display: flex; flex-wrap: wrap; gap: 32px; }
     .header-meta-item { display: flex; flex-direction: column; gap: 3px; }
-    .header-meta-item .label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
+    .header-meta-item .label { font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
     .header-meta-item .value { font-size: 14px; color: var(--text); font-weight: 500; }
-
-    /* ── LAYOUT ── */
     .layout { display: flex; }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: var(--sidebar-w);
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-      padding: 32px 0;
-      background: var(--surface);
-    }
-    .sidebar-title {
-      padding: 0 24px 14px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 8px;
-    }
-    .sidebar nav a {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 9px 24px;
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 400;
-      transition: all 0.18s ease;
-      border-left: 2px solid transparent;
-      line-height: 1.35;
-    }
-    .sidebar nav a:hover { color: var(--text); background: rgba(255,255,255,0.028); }
-    .sidebar nav a.active {
-      color: var(--accent);
-      border-left-color: var(--accent);
-      background: rgba(10,132,255,0.07);
-    }
-    .sidebar nav a .num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      flex-shrink: 0;
-      width: 20px;
-      margin-top: 2px;
-      opacity: 0.55;
-    }
+    .sidebar { width: var(--sidebar-w); flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; border-right: 1px solid var(--border); padding: 32px 0; background: var(--surface); }
+    .sidebar-title { padding: 0 24px 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .16em; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+    .sidebar nav a { display: flex; align-items: flex-start; gap: 10px; padding: 9px 24px; text-decoration: none; color: var(--muted); font-size: 13px; transition: all .18s ease; border-left: 2px solid transparent; line-height: 1.35; }
+    .sidebar nav a:hover { color: var(--text); background: rgba(255,255,255,.028); }
+    .sidebar nav a.active { color: var(--accent); border-left-color: var(--accent); background: rgba(10,132,255,.07); }
+    .sidebar nav a .num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); flex-shrink: 0; width: 20px; margin-top: 2px; opacity: .55; }
     .sidebar nav a.active .num { color: var(--accent); opacity: 1; }
-
-    /* ── MAIN ── */
     .main { flex: 1; min-width: 0; }
-
-    /* ── TOPIC SECTION ── */
-    .topic {
-      padding: 64px 60px;
-      border-bottom: 1px solid var(--border);
-    }
-    .topic:nth-child(even) { background: rgba(255,255,255,0.012); }
-
-    .topic-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      margin-bottom: 36px;
-    }
-    .topic-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding: 4px 10px;
-      border: 1px solid rgba(10,132,255,0.3);
-      border-radius: 4px;
-      background: rgba(10,132,255,0.08);
-      flex-shrink: 0;
-      margin-top: 7px;
-    }
-    .topic-title-block h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.55rem, 2.8vw, 2.1rem);
-      font-weight: 700;
-      line-height: 1.18;
-      letter-spacing: -0.02em;
-      color: #fff;
-    }
-    .topic-subtitle {
-      font-size: 12.5px;
-      color: var(--muted);
-      margin-top: 5px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* section label rule */
-    .section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .section-label::after { content:''; flex:1; height:1px; background: var(--border); }
-
-    /* what it is */
+    .topic { padding: 64px 60px; border-bottom: 1px solid var(--border); }
+    .topic:nth-child(even) { background: rgba(255,255,255,.012); }
+    .topic-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 36px; }
+    .topic-num { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); padding: 4px 10px; border: 1px solid rgba(10,132,255,.3); border-radius: 4px; background: rgba(10,132,255,.08); flex-shrink: 0; margin-top: 7px; }
+    .topic-title-block h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.55rem, 2.8vw, 2.1rem); font-weight: 700; line-height: 1.18; letter-spacing: -.02em; color: #fff; }
+    .topic-subtitle { font-size: 12.5px; color: var(--muted); margin-top: 5px; font-family: 'JetBrains Mono', monospace; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .15em; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
     .what-it-is { margin-bottom: 32px; }
-    .what-it-is p {
-      color: var(--text);
-      font-size: 15.5px;
-      line-height: 1.78;
-      max-width: 740px;
-    }
-    .what-it-is p code,
-    .what-it-is p strong {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      background: rgba(255,255,255,0.07);
-      padding: 1px 6px;
-      border-radius: 3px;
-      color: #C9C9F0;
-    }
-    .what-it-is p strong { font-weight: 600; color: #E2E2F0; background: none; padding: 0; font-family: 'DM Sans', sans-serif; font-size: inherit; }
-
-    /* code block */
-    .code-block {
-      margin-bottom: 32px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .code-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: #0D0D1C;
-      border-bottom: 1px solid var(--border);
-    }
+    .what-it-is p { color: var(--text); font-size: 15.5px; line-height: 1.78; max-width: 740px; }
+    .what-it-is p code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: rgba(255,255,255,.07); padding: 1px 6px; border-radius: 3px; color: #C9C9F0; }
+    .what-it-is p strong { font-weight: 600; }
+    .code-block { margin-bottom: 32px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+    .code-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: #0D0D1C; border-bottom: 1px solid var(--border); }
     .code-dots { display: flex; gap: 6px; }
     .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
-    .dot-r { background: #FF5F57; }
-    .dot-y { background: #FFBD2E; }
-    .dot-g { background: #28CA41; }
+    .dot-r{background:#FF5F57}.dot-y{background:#FFBD2E}.dot-g{background:#28CA41}
     .code-lang { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
     .code-block pre { margin: 0; border-radius: 0; }
-    .code-block pre code.hljs {
-      font-family: 'JetBrains Mono', monospace !important;
-      font-size: 13px !important;
-      line-height: 1.68 !important;
-      padding: 22px 22px !important;
-      background: #0D0D1C !important;
-    }
-
-    /* use case */
-    .use-case {
-      display: flex;
-      gap: 16px;
-      padding: 18px 20px;
-      background: rgba(48,209,88,0.055);
-      border: 1px solid rgba(48,209,88,0.18);
-      border-radius: 8px;
-      max-width: 740px;
-    }
+    .code-block pre code.hljs { font-family: 'JetBrains Mono', monospace !important; font-size: 13px !important; line-height: 1.68 !important; padding: 22px !important; background: #0D0D1C !important; }
+    .use-case { display: flex; gap: 16px; padding: 18px 20px; background: rgba(48,209,88,.055); border: 1px solid rgba(48,209,88,.18); border-radius: 8px; max-width: 740px; }
     .use-case-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-    .use-case-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--green);
-      margin-bottom: 4px;
-    }
+    .use-case-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: var(--green); margin-bottom: 4px; }
     .use-case-content p { font-size: 14.5px; color: var(--text); line-height: 1.62; }
-
-    /* ── FOOTER ── */
-    .site-footer {
-      padding: 40px 60px;
-      border-top: 1px solid var(--border);
-      background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    .site-footer { padding: 40px 60px; border-top: 1px solid var(--border); background: var(--surface); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
     .site-footer p { font-size: 13px; color: var(--muted); }
-
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .site-header { padding: 48px 24px 40px; }
-      .topic { padding: 48px 24px; }
-      .site-footer { padding: 32px 24px; }
-    }
-
-    /* scrollbar */
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #1E1E30; border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    @media(max-width:768px){.sidebar{display:none}.site-header{padding:48px 24px 40px}.topic{padding:48px 24px}.site-footer{padding:32px 24px}}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#1E1E30;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--muted)}
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════
-     HEADER
-════════════════════════════════════════════════ -->
 <header class="site-header">
   <div class="header-inner">
-    <div class="header-tag">SwiftUI &middot; Firebase &middot; iOS Native</div>
-    <h1>iOs<br>swift <span>Guide</span></h1>
-    <p class="header-desc">A technical walkthrough of a real-world iOS collectible card trading app. Features Chilean cultural figures, Firebase real-time sync, pack opening mechanics, and a coin-based economy.</p>
+    <div class="header-tag">Mobile Programming 2 &middot; Final Exam &middot; Week 16</div>
+    <h1>iOS Dev Quick<br>Guide <span>101</span></h1>
+    <p class="header-desc">A personal reference guide built around real projects from the course: <strong>Chilechilo Cards</strong> (Firebase trading-card app) and <strong>SwiftUILearning</strong>.</p>
     <div class="header-meta">
-      <div class="header-meta-item">
-        <span class="label">Project Type</span>
-        <span class="value">iOS App (SwiftUI)</span>
-      </div>
-      <div class="header-meta-item">
-        <span class="label">Backend</span>
-        <span class="value">Firebase (Auth + Firestore)</span>
-      </div>
-      <div class="header-meta-item">
-        <span class="label">Year</span>
-        <span class="value">2026</span>
-      </div>
-      <div class="header-meta-item">
-        <span class="label">Core Modules</span>
-        <span class="value">10 topics</span>
-      </div>
+      <div class="header-meta-item"><span class="label">Author</span><span class="value">F&eacute;lix Neder</span></div>
+      <div class="header-meta-item"><span class="label">Institution</span><span class="value">Universidad La Salle Chihuahua</span></div>
+      <div class="header-meta-item"><span class="label">Year</span><span class="value">2026</span></div>
+      <div class="header-meta-item"><span class="label">Topics covered</span><span class="value">10 of 17</span></div>
     </div>
   </div>
 </header>
 
 <div class="layout">
-
-  <!-- ═══ SIDEBAR ═══ -->
   <aside class="sidebar">
     <div class="sidebar-title">Contents</div>
     <nav id="toc">
       <a href="#t1" class="active"><span class="num">01</span>Swift Basics</a>
-      <a href="#t2"><span class="num">02</span>OOP &amp; Models</a>
-      <a href="#t3"><span class="num">03</span>SwiftUI UI</a>
-      <a href="#t4"><span class="num">04</span>MVVM + Firebase</a>
+      <a href="#t2"><span class="num">02</span>OOP</a>
+      <a href="#t3"><span class="num">03</span>SwiftUI</a>
+      <a href="#t4"><span class="num">04</span>MVVM + @Observable</a>
       <a href="#t5"><span class="num">05</span>Navigation</a>
-      <a href="#t6"><span class="num">06</span>Collections</a>
-      <a href="#t7"><span class="num">07</span>Firestore &amp; Data</a>
-      <a href="#t8"><span class="num">08</span>MapKit</a>
-      <a href="#t9"><span class="num">09</span>Camera &amp; QR</a>
-      <a href="#t10"><span class="num">10</span>CoreLocation</a>
+      <a href="#t6"><span class="num">06</span>Lists &amp; Tables</a>
+      <a href="#t7"><span class="num">07</span>HTTP &amp; JSON</a>
+      <a href="#t8"><span class="num">08</span>n8n &amp; Web Services</a>
+      <a href="#t9"><span class="num">09</span>TestFlight &amp; App Store</a>
+      <a href="#t10"><span class="num">10</span>UIKit Fundamentals</a>
     </nav>
   </aside>
 
-  <!-- ═══ MAIN ═══ -->
   <main class="main">
 
-    <!-- ─── TOPIC 1 ─── -->
+    <!-- T1 Swift Basics -->
     <section class="topic" id="t1">
       <div class="topic-header">
         <span class="topic-num">01</span>
@@ -395,63 +114,68 @@
           <div class="topic-subtitle">Variables &middot; Optionals &middot; Functions &middot; Closures</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>Swift is Apple's compiled, type-safe programming language introduced in 2014 as a modern replacement for Objective-C. It is used to build apps for iOS, macOS, watchOS, and tvOS. Swift's standout features are <strong>optionals</strong> (values that may or may not exist), <strong>type inference</strong> (the compiler figures out types from context), <strong>closures</strong> (self-contained blocks of code you can pass around), and clean syntax that reduces boilerplate. Every iOS project starts here — models, logic, views, and services are all written in Swift.</p>
+        <p>Swift is Apple's compiled, type-safe programming language introduced in 2014. It is the primary language for iOS, macOS, watchOS, and tvOS. Its standout features are <strong>optionals</strong> (values that may or may not exist, written as <code>Type?</code>), <strong>type inference</strong> (the compiler deduces types from context), <strong>closures</strong> (anonymous functions you assign and pass around), and a clean syntax that eliminates Objective-C's verbosity. Every file in an iOS project is Swift — models, services, ViewModels, and views all start here.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
-        <pre><code class="language-swift">// Constants and variables from AppUser model
-let appName: String = "Chilechilo Cards"    // immutable
-var coinBalance: Int = 0                     // mutable coin count
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
+        <pre><code class="language-swift">// Constants and variables
+let packCost: Int = 150      // immutable — pack price never changes
+var coins: Int = 0           // mutable — player balance updates
 
-// Type inference — compiler deduces the type
-var lastPackTime = Date()                    // Date
-var canOpenFree = false                      // Bool
+// Type inference
+var cardName = "Jalapeño Ace"    // inferred as String
+var isOwned  = false             // inferred as Bool
 
-// Optionals — a value that might be nil (card image URLs)
-var cardImageURL: String? = nil
-cardImageURL = "https://storage.chilechilo.com/cards/gobernador.jpg"
+// Optional — @DocumentID in Card produces a String?
+var cardId: String? = nil
+cardId = "bronze_01"
 
-// Safe unwrapping — guard lets you exit early
-func displayCard(_ name: String?) -&gt; String {
-    guard let name = name else {
-        return "Unknown Chilean figure"
+// Guard — safe early exit when optional is nil
+func logCard(_ id: String?) {
+    guard let id = id else {
+        print("Card has no Firestore ID yet")
+        return
     }
-    return "Tarjeta: \(name)"
+    print("Processing card: \(id)")
 }
 
-// nil coalescing — provide a fallback
-let displayName = cardImageURL ?? "placeholder_card.png"
+// nil coalescing — provide a fallback value
+let display = cardId ?? "unknown"   // "bronze_01"
 
-// Closure — filter rarity cards
-let allCardRarities = ["bronze", "silver", "gold", "platinum"]
-let rarePulls = allCardRarities.filter { $0 == "gold" || $0 == "platinum" }
-print(rarePulls)   // ["gold", "platinum"]
+// Closure — used when filtering cards by rarity
+let allCards: [Card] = []
+let goldOnly = allCards.filter { $0.rarity == "gold" }
 
-// async/await — modern concurrency in Firestore
-func fetchAllChileanCards() async throws -&gt; [Card] {
-    let snapshot = try await db.collection("cards").getDocuments()
-    return snapshot.documents.compactMap { try? $0.data(as: Card.self) }
+// Switch — used in rarityColor() and drawCard() in PackManager
+func coinValue(for rarity: String) -&gt; Int {
+    switch rarity {
+    case "bronze":  return 10
+    case "silver":  return 30
+    case "gold":    return 100
+    case "diamond": return 300
+    default:        return 5
+    }
+}
+
+// async/await — all Firestore calls use this pattern
+func fetchCards() async throws -&gt; [Card] {
+    // ... URLSession or Firestore SDK call
+    return []
 }</code></pre>
       </div>
-
       <div class="use-case">
         <span class="use-case-icon">🃏</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>Chilechilo Cards is entirely written in Swift. Optionals handle missing image URLs and optional user data fields, closures power pack-opening animations and card filtering, and async/await manages Firestore queries seamlessly. The AppUser model uses optionals for lastPackOpened to check if a free pack timer is valid.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p>In Chilechilo Cards, <code>Card.id</code> is <code>String?</code> because Firestore's <code>@DocumentID</code> is only populated after fetching — guard unwraps it safely before any Firestore write. The <code>coinValue(for:)</code> function mirrors <code>processDuplicate(rarity:)</code> in <code>PackManager.swift</code>, and closures power the <code>.filter</code> and <code>.map</code> calls throughout every ViewModel.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 2 ─── -->
+    <!-- T2 OOP -->
     <section class="topic" id="t2">
       <div class="topic-header">
         <span class="topic-num">02</span>
@@ -460,527 +184,533 @@ func fetchAllChileanCards() async throws -&gt; [Card] {
           <div class="topic-subtitle">Value types &middot; Reference types &middot; Named cases &middot; Contracts</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>Swift has four building blocks for organizing data and behavior. <strong>Structs</strong> are value types — copied when assigned or passed, making them thread-safe and predictable by default. <strong>Classes</strong> are reference types — all variables point to the same object in memory, ideal for shared mutable state. <strong>Enums</strong> define a fixed, exhaustive set of named cases with optional associated values. <strong>Protocols</strong> define a contract — a required set of properties and methods — that any type can adopt, enabling polymorphism and dependency injection without rigid class hierarchies.</p>
+        <p>Swift provides four building blocks for organizing data and behavior. <strong>Structs</strong> are value types — copied when assigned or passed, making them safe and predictable (ideal for data models). <strong>Classes</strong> are reference types — all variables point to the same object in memory, making them right for shared, mutable state like managers and services. <strong>Enums</strong> define a fixed set of named cases with optional associated values. <strong>Protocols</strong> define contracts — required properties and methods — that any type can conform to, enabling polymorphism without inheritance.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
-        <pre><code class="language-swift">// Struct — the core Card model from Firestore
-import Foundation
-import FirebaseFirestore
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
+        <pre><code class="language-swift">import FirebaseFirestore
 
+// ── Struct — value type, used for all data models ─────
+// From Card.swift
 struct Card: Identifiable, Codable {
-    @DocumentID var id: String?
+    @DocumentID var id: String?   // Firestore document ID
     var name: String
     var rarity: String = "bronze"
     var imageURL: String = "placeholder"
 }
 
-// Struct for user-owned cards (count tracking)
+// From UserCard.swift
 struct UserCard: Identifiable, Codable {
     var id: String
     var count: Int
 }
 
-// Enum — rarity tiers with associated colors
-enum Rarity: String, CaseIterable {
-    case bronze = "Bronze"
-    case silver = "Silver"
-    case gold = "Gold"
-    case platinum = "Platinum"
-}
-
-// Class — AppUser model for authentication state
+// From AppUser.swift
 struct AppUser: Codable {
     var email: String
     var coins: Int
     var lastPackOpened: Date
 }
 
-// Usage in CollectionViewModel
-let chilechilo_gobernador = Card(
-    id: "1",
-    name: "Gobernador de Chilechilo",
-    rarity: "gold",
-    imageURL: "https://storage.com/gobernador.jpg"
-)
+// ── Enum — could be used to type-safe rarities ────────
+// (Currently stored as String in the project;
+//  an enum makes the compiler catch typos at build time)
+enum Rarity: String, CaseIterable {
+    case bronze  = "bronze"
+    case silver  = "silver"
+    case gold    = "gold"
+    case diamond = "diamond"
 
-let owned = UserCard(id: "1", count: 2)  // User has 2 copies
-print("Owns \(owned.count) × \(chilechilo_gobernador.name)")  // Owns 2 × Gobernador
+    var coinValue: Int {
+        switch self {
+        case .bronze:  return 10
+        case .silver:  return 30
+        case .gold:    return 100
+        case .diamond: return 300
+        }
+    }
+}
 
-// Struct is value type — each collection view gets its own copy
-var displayCard = chilechilo_gobernador
-displayCard.name = "Foil " + displayCard.name  // Doesn't affect original
-print(chilechilo_gobernador.name)  // Still "Gobernador de Chilechilo"</code></pre>
+// ── Class — reference type, used for managers/services ─
+// Mirrors AuthManager.swift
+class AuthManager: ObservableObject {
+    @Published var isLoggedIn = false
+
+    func login(email: String, password: String) async throws {
+        // Firebase Auth call
+    }
+    func logout() {
+        // Auth.auth().signOut()
+        isLoggedIn = false
+    }
+}
+
+// ── Protocol — Identifiable and Codable are protocols ──
+// Conforming to Identifiable lets SwiftUI's ForEach work
+// Conforming to Codable lets JSONDecoder / Firestore decode
+protocol CardDisplayable {
+    var name: String { get }
+    var rarity: String { get }
+}
+
+// Card already satisfies this automatically
+extension Card: CardDisplayable {}</code></pre>
       </div>
-
       <div class="use-case">
         <span class="use-case-icon">🏗️</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>In Chilechilo Cards, Card is a struct with @DocumentID (safe to copy inside SwiftUI cells and decodable from Firestore), UserCard tracks owned counts by ID, and Rarity is an enum for filtering rarity tiers. AppUser is a simple Codable struct synced from Firestore. Identifiable and Codable protocols are required by SwiftUI's List and Firestore's automatic JSON decoding.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p><code>Card</code>, <code>UserCard</code>, and <code>AppUser</code> are all structs — safe to copy into SwiftUI views. <code>AuthManager</code>, <code>FirestoreManager</code>, and <code>PackManager</code> are classes — shared instances that hold live Firebase connections and mutable state. Conforming <code>Card</code> to <code>Identifiable</code> and <code>Codable</code> was required by both SwiftUI's <code>ForEach</code> and Firestore's <code>data(as:)</code> decoder.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 3 ─── -->
+    <!-- T3 SwiftUI -->
     <section class="topic" id="t3">
       <div class="topic-header">
         <span class="topic-num">03</span>
         <div class="topic-title-block">
-          <h2>SwiftUI — Building the Chilechilo UI</h2>
-          <div class="topic-subtitle">Declarative UI &middot; Stacks &middot; State &middot; Composition</div>
+          <h2>SwiftUI — Views, Layouts &amp; Modifiers</h2>
+          <div class="topic-subtitle">Declarative UI &middot; Stacks &middot; ZStack &middot; Modifiers</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>SwiftUI is Apple's declarative UI framework, released in 2019. Instead of imperatively creating and configuring views one by one (like UIKit), you declare <em>what</em> the UI looks like given a certain state — and SwiftUI re-renders the affected parts automatically when that state changes. Layouts are built by composing stacks: <code>VStack</code> (vertical), <code>HStack</code> (horizontal), and <code>ZStack</code> (layered). <strong>Modifiers</strong> chain off any view to customize font, color, padding, shadow, animation, and more — each modifier returns a new, wrapped view so they compose cleanly.</p>
+        <p>SwiftUI is Apple's declarative UI framework (iOS 13+). Instead of imperatively creating and configuring views step by step, you declare <em>what</em> the UI looks like for a given state — SwiftUI handles rendering and automatically re-renders when state changes. Layouts are built by composing stacks: <code>VStack</code> (vertical), <code>HStack</code> (horizontal), and <code>ZStack</code> (layered / overlapping). <strong>Modifiers</strong> chain off any view to change its appearance, behavior, or layout — each modifier returns a new wrapped view, so they compose cleanly and read like a recipe.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
         <pre><code class="language-swift">import SwiftUI
 
-struct CardRowView: View {
+// Directly from CollectionView.swift — CardThumbnail
+struct CardThumbnail: View {
     let card: Card
-    @State private var isFavorited = false
+    let owned: Bool
+    let count: Int
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        // ZStack layers content on top of each other
+        ZStack(alignment: .topTrailing) {
 
-            // Card image from Firestore URL
-            ZStack(alignment: .topTrailing) {
-                AsyncImage(url: URL(string: card.imageURL)) { image in
-                    image.resizable().scaledToFill()
-                } placeholder: {
-                    Color.gray.opacity(0.3)
+            // Background — rarity color if owned, gray if locked
+            RoundedRectangle(cornerRadius: 12)
+                .fill(owned
+                      ? rarityColor(card.rarity)   // bronze/silver/gold/diamond
+                      : Color.gray.opacity(0.3))
+                .frame(height: 140)
+
+            if owned {
+                // Card image from Assets
+                Image(card.imageURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 90, height: 130)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                // Duplicate count badge — only shown when count &gt; 1
+                if count &gt; 1 {
+                    Text("x\(count)")
+                        .font(.caption.bold())
+                        .foregroundColor(.white)
+                        .padding(4)
+                        .background(Color.black.opacity(0.6))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .padding(4)   // positions the badge inside the ZStack corner
                 }
-                .frame(height: 200)
-                .clipped()
-                .cornerRadius(12)
-
-                // Rarity badge (bronze/silver/gold/platinum)
-                Text(card.rarity.uppercased())
-                    .font(.caption2.weight(.bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 8).padding(.vertical, 4)
-                    .background(rarityColor(card.rarity))
-                    .cornerRadius(6)
-                    .padding(8)
-            }
-
-            // Card name and rarity
-            VStack(alignment: .leading, spacing: 4) {
-                Text(card.name)
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(.primary)
-                Text(card.rarity)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            // Favorite toggle
-            HStack {
-                Spacer()
-                Button {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isFavorited.toggle()
-                    }
-                } label: {
-                    Image(systemName: isFavorited ? "star.fill" : "star")
-                        .foregroundStyle(isFavorited ? .yellow : .gray)
-                }
+            } else {
+                // Locked card — show padlock
+                Image(systemName: "lock.fill")
+                    .foregroundColor(.gray)
+                    .font(.title)
             }
         }
-        .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
     }
+}
 
-    func rarityColor(_ rarity: String) -&gt; Color {
-        switch rarity.lowercased() {
-        case "bronze": return .brown
-        case "silver": return .gray
-        case "gold": return .yellow
-        case "platinum": return .cyan
-        default: return .blue
-        }
-    }
+// rarityColor() is a global helper in RarityColor.swift
+// It returns a SwiftUI Color based on the rarity string
+func rarityColor(_ rarity: String) -&gt; Color {
+    switch rarity {
+    case "bronze":  return Color(red: 0.8, green: 0.5, blue: 0.2)
+    case "silver":  return Color(red: 0.7, green: 0.7, blue: 0.75)
+    case "gold":    return Color(red: 0.9, green: 0.75, blue: 0.1)
+    case "diamond": return Color(red: 0.4, green: 0.8, blue: 1.0)
+    default:        return .gray
     }
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">📱</span>
+        <span class="use-case-icon">🎴</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>Every screen in Chilechilo Cards is built with SwiftUI. The collection view uses a List of CardRowViews fetched from Firestore. AsyncImage loads card artwork URLs directly from cloud storage. All styling through modifier chains with dynamic rarity-based colors. @State on isFavorited causes the star button to re-render automatically on each tap.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p><code>CardThumbnail</code> in <code>CollectionView.swift</code> uses a <code>ZStack</code> to layer the card image on top of a colored background. The <code>rarityColor()</code> helper drives the background fill so bronze, silver, gold, and diamond cards each have a distinct color. Unowned cards show a gray fill with a lock icon — all controlled purely through modifiers with no imperative code.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 4 ─── -->
+    <!-- T4 MVVM -->
     <section class="topic" id="t4">
       <div class="topic-header">
         <span class="topic-num">04</span>
         <div class="topic-title-block">
-          <h2>MVVM + Firebase</h2>
-          <div class="topic-subtitle">Architecture &middot; Firestore sync &middot; Observable state</div>
+          <h2>MVVM + @Observable</h2>
+          <div class="topic-subtitle">Architecture &middot; @ObservableObject &middot; @Observable &middot; Reactive state</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>Model-View-ViewModel (MVVM) is an architecture pattern that separates code into three layers. The <strong>Model</strong> holds raw data. The <strong>ViewModel</strong> contains business logic, fetches from Firestore, and transforms data for display. The <strong>View</strong> simply renders what the ViewModel exposes — no logic lives there. In iOS 17+, <code>@ObservableObject + @Published</code> automatically notifies SwiftUI when state changes.</p>
+        <p>Model-View-ViewModel (MVVM) separates code into three layers: the <strong>Model</strong> holds raw data, the <strong>ViewModel</strong> contains business logic and exposes state for the View, and the <strong>View</strong> only renders. In SwiftUI there are two ways to make a class observable. The older <code>ObservableObject + @Published</code> pattern (iOS 14+) re-renders every subscriber when any <code>@Published</code> property changes. The newer <code>@Observable</code> macro (iOS 17+) is more granular — each View only re-renders for the exact properties it reads. Both patterns appear in this project.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
         <pre><code class="language-swift">import SwiftUI
-import Combine
-import FirebaseFirestore
+import Observation   // needed for @Observable
 
-// ── CollectionViewModel — loads cards & owned status ──────
+// ── Pattern A: @ObservableObject (used in PackViewModel) ─
 @MainActor
-class CollectionViewModel: ObservableObject {
-    @Published var allCards: [Card] = []
-    @Published var ownedIds: Set<String> = []
-    @Published var ownedCounts: [String: Int] = [:]
-    
-    private let manager = FirestoreManager()
+class PackViewModel: ObservableObject {
+    @Published var coins = 0
+    @Published var canOpenFree = false
+    @Published var timeRemaining: TimeInterval = 0
+    @Published var drawnCards: [Card] = []
+    @Published var showReveal = false
 
-    // Derived state — computed from cards
-    var cardCount: Int { ownedIds.count }
-    var isEmpty: Bool { ownedIds.isEmpty }
+    private let manager = PackManager()
 
-    func load() async {
-        do {
-            allCards = try await manager.fetchAllCards()
-            let owned = try await manager.fetchOwnedCards()
-            ownedIds = Set(owned.map { $0.id })
-            ownedCounts = Dictionary(
-                uniqueKeysWithValues: owned.map { ($0.id, $0.count) }
-            )
-        } catch {
-            print("Error loading collection: \(error)")
-        }
+    func openPack() {
+        drawnCards = manager.openPack(allCards: allCards)
+        showReveal = true   // triggers the sheet in HomeView
     }
 
-    func addCard(_ card: Card) {
-        guard let cardId = card.id else { return }
-        ownedIds.insert(cardId)
-        ownedCounts[cardId, default: 0] += 1
-    }
-
-    func removeCard(withId id: String) {
-        ownedIds.remove(id)
-        ownedCounts.removeValue(forKey: id)
+    var formattedTime: String {
+        let h = Int(timeRemaining) / 3600
+        let m = (Int(timeRemaining) % 3600) / 60
+        let s = Int(timeRemaining) % 60
+        return String(format: "%02d:%02d:%02d", h, m, s)
     }
 }
 
-// ── View — only renders, zero business logic ───────────
-struct BinderView: View {
-    // @State with @Observable (no @StateObject needed)
-    @State private var vm = BinderViewModel()
+// ── Pattern B: @Observable (used in LocationViewModel) ──
+// iOS 17+ — more granular, no @Published needed
+@Observable
+class LocationViewModel: NSObject, CLLocationManagerDelegate {
+    var latitude: Double  = 0.0
+    var longitude: Double = 0.0
+    var authorizationStatus: CLAuthorizationStatus = .notDetermined
+    var isUpdating = false
+
+    private let manager = CLLocationManager()
+
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+    }
+
+    func requestPermission() {
+        manager.requestWhenInUseAuthorization()
+    }
+}
+
+// ── How they're used in Views ─────────────────────────
+struct HomeView: View {
+    // @StateObject for ObservableObject
+    @StateObject private var packVM = PackViewModel()
 
     var body: some View {
-        NavigationStack {
-            Group {
-                if vm.isEmpty {
-                    ContentUnavailableView(
-                        "Your binder is empty",
-                        systemImage: "square.stack.3d.up",
-                        description: Text("Scan physical cards or browse the database to add them")
-                    )
-                } else {
-                    List {
-                        ForEach(vm.cards) { card in
-                            HStack {
-                                Text(card.name)
-                                Spacer()
-                                Text("$\(card.marketPrice, specifier: "%.2f")")
-                                    .foregroundStyle(.secondary)
-                            }
-                            .swipeActions {
-                                Button("Delete", role: .destructive) {
-                                    vm.remove(card)
-                                }
-                            }
-                        }
+        Text("Coins: \(packVM.coins)")
+    }
+}
 
-                        Section {
-                            HStack {
-                                Text("Total Portfolio Value").bold()
-                                Spacer()
-                                Text("$\(vm.totalValue, specifier: "%.2f")").bold()
-                            }
-                        }
-                    }
-                }
-            }
-            .navigationTitle("My Binder (\(vm.cardCount))")
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Button("Sync Collection") { Task { await vm.syncWithCloud() } }
-                        .disabled(vm.isEmpty)
-                        .buttonStyle(.borderedProminent)
-                }
-            }
-            .overlay { if vm.isLoading { ProgressView() } }
-        }
+struct LocationView: View {
+    // @State for @Observable (no @StateObject needed)
+    @State private var vm = LocationViewModel()
+
+    var body: some View {
+        Text("Lat: \(vm.latitude)")
     }
 }</code></pre>
       </div>
-
       <div class="use-case">
         <span class="use-case-icon">🔁</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>CollectionViewModel handles all Firestore queries, owned card tracking, and collection statistics. The View layer only renders and dispatches events. This separation allows testing card-fetching logic independently of UI presentation, and makes swapping the backend trivial.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p>The project uses both patterns. <code>PackViewModel</code>, <code>CollectionViewModel</code>, and <code>AuthViewModel</code> use the older <code>ObservableObject + @Published</code> approach (broader iOS compatibility). <code>LocationViewModel</code> uses the newer <code>@Observable</code> macro — notice it is declared with <code>@State</code> in <code>LocationView</code>, not <code>@StateObject</code>.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 5 ─── -->
+    <!-- T5 Navigation -->
     <section class="topic" id="t5">
       <div class="topic-header">
         <span class="topic-num">05</span>
         <div class="topic-title-block">
           <h2>Navigation — NavigationStack &amp; TabView</h2>
-          <div class="topic-subtitle">Push-pop hierarchy &middot; Tab bars &middot; Deep linking</div>
+          <div class="topic-subtitle">Push-pop &middot; Tab bars &middot; Sheets &middot; navigationDestination</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p><code>NavigationStack</code> (iOS 16+) manages a push/pop hierarchy of views. The user drills in by tapping a <code>NavigationLink</code> and goes back with the system back button. It uses a type-safe, value-based API: you attach a <code>navigationDestination</code> modifier that maps a value type to a destination view. <code>TabView</code> creates a tab bar at the bottom of the screen — each tab is an independent root view with its own navigation stack. Together, these two patterns cover nearly every navigation need in a standard iOS app.</p>
+        <p><code>NavigationStack</code> (iOS 16+) manages a push/pop view hierarchy. The user drills into a child view via a <code>NavigationLink</code> and goes back with the back button. The type-safe <code>navigationDestination(for:)</code> modifier declares which view to show for a given value type, decoupling navigation triggers from destinations. <code>TabView</code> creates a tab bar at the bottom of the screen, giving users access to top-level sections of the app. <code>.sheet</code> presents a modal overlay that the user can dismiss by pulling down — perfect for temporary flows like opening a card pack.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
         <pre><code class="language-swift">import SwiftUI
 
-// ── Root: HomeView with TabView ────────────────────────
+// ── HomeView — TabView with 4 tabs (from HomeView.swift) ─
 struct HomeView: View {
-    @StateObject private var packVM = PackViewModel()
-    @StateObject private var colVM = CollectionViewModel()
+    @StateObject private var packVM  = PackViewModel()
+    @StateObject private var colVM   = CollectionViewModel()
 
     var body: some View {
         TabView {
-            // Pack opening tab
-            VStack(spacing: 30) {
-                Text("🌶️ Chilechilo Cards")
-                    .font(.largeTitle.bold())
+            packTab
+                .tabItem { Label("Inicio",    systemImage: "house.fill") }
 
-                Text("🪙 \(packVM.coins) monedas")
-                    .font(.title2)
-
-                Button("Abrir paquete gratis") {
-                    Task { await packVM.openPack() }
-                }
-                .buttonStyle(.borderedProminent)
-            }
-            .tabItem { Label("Inicio", systemImage: "house.fill") }
-
-            // Collection tab
             CollectionView()
                 .tabItem { Label("Colección", systemImage: "square.grid.2x2.fill") }
 
-            // Profile tab
             ProfileView()
-                .tabItem { Label("Perfil", systemImage: "person.fill") }
-            
-            // Location tab
+                .tabItem { Label("Perfil",    systemImage: "person.fill") }
+
             LocationView()
                 .tabItem { Label("Ubicación", systemImage: "location.fill") }
+        }
+        // Sheet — shown when a pack is opened
+        .sheet(isPresented: $packVM.showReveal, onDismiss: {
+            Task {
+                await colVM.load()
+                packVM.load(allCards: colVM.allCards, ownedIds: colVM.ownedIds)
+            }
+        }) {
+            PackOpenView(
+                cards: packVM.drawnCards,
+                ownedIds: colVM.ownedIds,
+                onFinalize: { choices in
+                    await packVM.finalizePack(choices: choices)
+                }
+            )
         }
     }
 }
 
-// ── Each tab maintains its own navigation stack ──────────
-struct ProfileView: View {
-    @EnvironmentObject var auth: AuthManager
-    
+// ── CollectionView — NavigationStack inside a tab ─────
+struct CollectionView: View {
+    @StateObject private var vm = CollectionViewModel()
+    let columns = [GridItem(.adaptive(minimum: 100))]
+
     var body: some View {
         NavigationStack {
-            VStack(spacing: 16) {
-                Text("Mi Perfil")
-                    .font(.title.bold())
-                
-                Button("Cerrar sesión") {
-                    auth.logout()
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(vm.allCards) { card in
+                        CardThumbnail(card: card,
+                                      owned: vm.ownedIds.contains(card.id ?? ""),
+                                      count: vm.ownedCounts[card.id ?? ""] ?? 0)
+                    }
                 }
-                .buttonStyle(.bordered)
+                .padding()
             }
-            .navigationTitle("Profile")
+            .navigationTitle("Mi colección")
+            .task { await vm.load() }
+        }
+    }
+}
+
+// ── LoginView — navigationDestination for register ───
+struct LoginView: View {
+    @State private var goToRegister = false
+
+    var body: some View {
+        NavigationStack {
+            VStack { /* ... login form ... */ }
+                .navigationDestination(isPresented: $goToRegister) {
+                    RegisterView()   // pushed when goToRegister = true
+                }
         }
     }
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">🗺️</span>
+        <span class="use-case-icon">🗂️</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>Chilechilo Cards uses TabView with four root tabs: pack opening (Inicio), collection (Colección), profile (Perfil), and locations (Ubicación). Each tab maintains its own NavigationStack independently. TabView + NavigationStack is the standard pattern for most iOS apps and handles deep linking and restoration cleanly.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p>The root of the app is a <code>TabView</code> with four tabs: Home (pack opening), Collection, Profile, and Location. When a pack is opened, <code>packVM.showReveal = true</code> triggers a <code>.sheet</code> that presents <code>PackOpenView</code> modally. On dismiss, both ViewModels reload so the collection reflects the new cards. The Login screen uses <code>navigationDestination(isPresented:)</code> to push <code>RegisterView</code>.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 6 ─── -->
+    <!-- T6 Lists & Tables -->
     <section class="topic" id="t6">
       <div class="topic-header">
         <span class="topic-num">06</span>
         <div class="topic-title-block">
           <h2>Lists &amp; Tables</h2>
-          <div class="topic-subtitle">Lazy rows &middot; Swipe actions &middot; Sections &middot; Search</div>
+          <div class="topic-subtitle">LazyVGrid &middot; Adaptive columns &middot; ForEach &middot; task</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p><code>List</code> is SwiftUI's primary scrollable container for displaying rows of data. It renders lazily — only visible rows are created, making it efficient even with thousands of items. List supports swipe actions, pull-to-refresh, editing mode, multi-selection, and sections. The <code>.searchable</code> modifier adds a system search bar that filters the data source in real time. For data-grid-style layouts on iPad and macOS, <code>Table</code> provides sortable columns with a header row. List and Table cover virtually every data-display scenario in iOS apps.</p>
+        <p><code>List</code> is SwiftUI's lazy scrollable container for displaying rows. <code>LazyVGrid</code> and <code>LazyHGrid</code> extend the concept to grids — only visible cells are rendered, keeping memory use low even with hundreds of items. <code>GridItem(.adaptive(minimum:))</code> creates as many columns as fit the available width at the given minimum size, making the grid automatically responsive across iPhone and iPad. <code>ForEach</code> iterates over a data collection and renders a view per item. The <code>.task</code> modifier kicks off async data loading when the view first appears.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
         <pre><code class="language-swift">import SwiftUI
 
-struct CardBinderListView: View {
-    @State private var allCards: [TradingCard] = TradingCard.samples
-    @State private var searchText = ""
+// ── CollectionView — full grid from the project ───────
+struct CollectionView: View {
+    @StateObject private var vm = CollectionViewModel()
 
-    // Computed: filtered by search text, grouped by type
-    var filteredCards: [TradingCard] {
-        searchText.isEmpty
-            ? allCards
-            : allCards.filter {
-                $0.name.localizedCaseInsensitiveContains(searchText)
-              }
+    // .adaptive creates as many columns as fit at ≥100 pt wide
+    let columns = [GridItem(.adaptive(minimum: 100))]
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(vm.allCards) { card in
+                        CardThumbnail(
+                            card: card,
+                            owned: vm.ownedIds.contains(card.id ?? ""),
+                            count: vm.ownedCounts[card.id ?? ""] ?? 0
+                        )
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("Mi colección")
+            // .task runs once when the view appears, cancels on disappear
+            .task { await vm.load() }
+        }
     }
+}
 
-    var groupedByTypes: [CardType: [TradingCard]] {
-        Dictionary(grouping: filteredCards) { $0.type }
+// ── CollectionViewModel — loads data into the grid ───
+@MainActor
+class CollectionViewModel: ObservableObject {
+    @Published var allCards: [Card]         = []
+    @Published var ownedIds: Set&lt;String&gt;    = []
+    @Published var ownedCounts: [String: Int] = [:]
+
+    private let manager = FirestoreManager()
+
+    func load() async {
+        do {
+            // Fetch all 60+ cards from Firestore
+            allCards = try await manager.fetchAllCards()
+
+            // Fetch which ones the logged-in user owns
+            let owned = try await manager.fetchOwnedCards()
+
+            // Build a Set for O(1) lookup in CardThumbnail
+            ownedIds    = Set(owned.map { $0.id })
+            ownedCounts = Dictionary(uniqueKeysWithValues:
+                            owned.map { ($0.id, $0.count) })
+        } catch {
+            print("Error cargando colección: \(error)")
+        }
+    }
+}
+
+// ── Tip: filtering the grid by rarity ────────────────
+// Adding a filter segmented control over the grid
+struct FilteredCollectionView: View {
+    @StateObject private var vm = CollectionViewModel()
+    @State private var filter = "all"
+    let columns = [GridItem(.adaptive(minimum: 100))]
+
+    var displayed: [Card] {
+        filter == "all"
+            ? vm.allCards
+            : vm.allCards.filter { $0.rarity == filter }
     }
 
     var body: some View {
-        List {
-            ForEach(CardType.allCases, id: \.self) { typeKey in
-                if let sections = groupedByTypes[typeKey], !sections.isEmpty {
-                    Section(typeKey.rawValue) {
-                        ForEach(sections) { card in
-                            CardRowView(card: card)
-                                // Swipe left — destructive delete from binder
-                                .swipeActions(edge: .trailing) {
-                                    Button("Delete", role: .destructive) {
-                                        deleteCard(card)
-                                    }
-                                }
-                                // Swipe right — quick add to wishlist
-                                .swipeActions(edge: .leading) {
-                                    Button {
-                                        addToWishlist(card)
-                                    } label: {
-                                        Label("Wishlist", systemImage: "heart.badge.plus")
-                                    }
-                                    .tint(.green)
-                                }
-                        }
+        VStack {
+            Picker("Rarity", selection: $filter) {
+                Text("All").tag("all")
+                Text("Bronze").tag("bronze")
+                Text("Gold").tag("gold")
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
+                    ForEach(displayed) { card in
+                        CardThumbnail(card: card,
+                                      owned: vm.ownedIds.contains(card.id ?? ""),
+                                      count: vm.ownedCounts[card.id ?? ""] ?? 0)
                     }
                 }
+                .padding()
             }
         }
-        .listStyle(.insetGrouped)
-        .searchable(text: $searchText, prompt: "Search index matching name…")
-        .refreshable {
-            // Pull-to-refresh — async values update
-            await reloadLiveMarketPrices()
-        }
-        .animation(.default, value: filteredCards)
-        .navigationTitle("Card Index")
+        .task { await vm.load() }
     }
-
-    func deleteCard(_ c: TradingCard)      { allCards.removeAll { $0.id == c.id } }
-    func addToWishlist(_ c: TradingCard)   { /* Append to wishlist data controller */ }
-    func reloadLiveMarketPrices() async    { /* await API refresh loop */ }
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">📋</span>
+        <span class="use-case-icon">🗃️</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>Chilechilo Cards groups owned cards by rarity (Platinum, Gold, Silver, Bronze) for easy browsing. Left-swipe removes duplicates from the collection. The .searchable modifier allows players to search by card name in real time. Pull-to-refresh reloads owned cards from Firestore.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p><code>CollectionView</code> uses a <code>LazyVGrid</code> with <code>GridItem(.adaptive(minimum: 100))</code> to display all cards in a responsive grid. On a wide iPhone it shows 3 columns; on iPad it shows more — no manual calculation needed. The <code>.task</code> modifier fetches both the full card catalog and the user's owned cards from Firestore when the view appears, and <code>ownedIds</code> as a <code>Set&lt;String&gt;</code> makes the owned check O(1) per cell.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 7 ─── -->
+    <!-- T7 HTTP & JSON -->
     <section class="topic" id="t7">
       <div class="topic-header">
         <span class="topic-num">07</span>
         <div class="topic-title-block">
-          <h2>Firestore &amp; Real-Time Data</h2>
-          <div class="topic-subtitle">Codable &middot; async/await &middot; Document queries &middot; Auth sync</div>
+          <h2>HTTP &amp; JSON — Codable + Firestore</h2>
+          <div class="topic-subtitle">Codable &middot; @DocumentID &middot; Firestore SDK &middot; Real-time listeners</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>Firebase Firestore is a cloud NoSQL database accessed directly from iOS apps via the Firebase SDK. Collections hold documents (JSON-like objects) that are automatically decoded into Swift <code>Codable</code> types. Queries are written in a type-safe builder API and return results asynchronously via <code>async/await</code>. Security rules define read/write access. Unlike REST APIs where you manually sync, Firestore can push real-time updates to listeners, keeping the UI automatically in sync with the backend.</p>
+        <p>Most iOS apps talk to a backend over HTTP. Apple's <code>URLSession</code> handles raw HTTP requests with <code>async/await</code>, and the <code>Codable</code> protocol maps JSON to Swift types automatically via <code>JSONDecoder</code>. Firebase Firestore is a NoSQL cloud database whose iOS SDK wraps HTTP internally — it exposes the same <code>Codable</code> integration through <code>data(as:)</code>, so your model structs decode from Firestore documents the same way they would from JSON. Firestore also supports <strong>real-time listeners</strong> that push updates to the app whenever a document changes in the cloud.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
-        <pre><code class="language-swift">import SwiftUI
-import FirebaseFirestore
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
+        <pre><code class="language-swift">import FirebaseFirestore
 import FirebaseAuth
 
-// ── 1. Firestore manager — centralized data access ────
+// ── Card.swift — Codable + @DocumentID ───────────────
+// @DocumentID maps the Firestore document ID into the struct
+struct Card: Identifiable, Codable {
+    @DocumentID var id: String?   // filled by Firestore SDK on decode
+    var name:     String
+    var rarity:   String = "bronze"
+    var imageURL: String = "placeholder"
+}
+
+// ── FirestoreManager.swift — fetch methods ────────────
 @MainActor
 class FirestoreManager: ObservableObject {
     private let db = Firestore.firestore()
 
-    // GET — fetch all Chilean cards from Firestore collection
+    // GET all cards from the "cards" collection
     func fetchAllCards() async throws -&gt; [Card] {
         let snapshot = try await db.collection("cards").getDocuments()
-        print("📦 Found \(snapshot.documents.count) cards")
+        // data(as:) uses Codable — same as JSONDecoder
         return snapshot.documents.compactMap { try? $0.data(as: Card.self) }
     }
 
-    // GET — fetch user's owned cards and counts
+    // GET cards owned by the current user (subcollection)
     func fetchOwnedCards() async throws -&gt; [UserCard] {
         guard let uid = Auth.auth().currentUser?.uid else { return [] }
-        let snapshot = try await db.collection("userCards")
+        let snapshot = try await db
+            .collection("userCards")
             .document(uid)
             .collection("owned")
             .getDocuments()
@@ -988,389 +718,345 @@ class FirestoreManager: ObservableObject {
     }
 }
 
-// ── 2. Authentication manager with Firestore ──────────
-class AuthManager: ObservableObject {
-    @Published var isLoggedIn = false
-    private let db = Firestore.firestore()
+// ── PackViewModel.swift — real-time listener ──────────
+// Firestore can push live updates using addSnapshotListener
+private func fetchUserData() {
+    guard let uid = Auth.auth().currentUser?.uid else { return }
 
-    func register(email: String, password: String) async throws {
-        let result = try await Auth.auth().createUser(withEmail: email, password: password)
-        try await createUserDocument(uid: result.user.uid, email: email)
-        await MainActor.run { isLoggedIn = true }
-    }
+    Firestore.firestore()
+        .collection("users").document(uid)
+        .addSnapshotListener { [weak self] snapshot, _ in
+            guard let data = snapshot?.data() else { return }
 
-    private func createUserDocument(uid: String, email: String) async throws {
-        let data: [String: Any] = [
-            "email": email,
-            "coins": 0,
-            "lastPackOpened": Timestamp(date: Date(timeIntervalSince1970: 0))
-        ]
-        try await db.collection("users").document(uid).setData(data)
-        print("✅ User document created in Firestore")
-    }
-}
+            let coins = data["coins"] as? Int ?? 0
+            let last  = (data["lastPackOpened"] as? Timestamp)?.dateValue()
+                         ?? Date(timeIntervalSince1970: 0)
 
-// ── 3. View that loads Firestore data ────────────────
-struct CollectionView: View {
-    @StateObject private var colVM = CollectionViewModel()
-
-    var body: some View {
-        List {
-            ForEach(colVM.allCards) { card in
-                Text(card.name)
+            Task { @MainActor [weak self] in
+                self?.coins       = coins
+                self?.canOpenFree = self?.manager.canOpenFree(lastOpened: last) ?? false
             }
         }
-        .task {
-            await colVM.load()  // Fetch from Firestore
+}
+
+// ── PackManager — write operations ───────────────────
+// After opening a pack, save results back to Firestore
+func savePackResult(cards: [Card], ownedIds: Set&lt;String&gt;) async throws -&gt; Int {
+    guard let uid = Auth.auth().currentUser?.uid else { return 0 }
+    let ownedRef = db.collection("userCards").document(uid).collection("owned")
+    var coinsEarned = 0
+
+    for card in cards {
+        let cardId = card.id ?? ""
+        if ownedIds.contains(cardId) {
+            coinsEarned += processDuplicate(rarity: card.rarity)
+        } else {
+            // Write new owned card document
+            try await ownedRef.document(cardId).setData(["id": cardId, "count": 1])
         }
     }
+    try await db.collection("users").document(uid).updateData([
+        "coins": FieldValue.increment(Int64(coinsEarned))
+    ])
+    return coinsEarned
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">🌐</span>
+        <span class="use-case-icon">☁️</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>Chilechilo Cards uses Firebase Firestore for all data persistence. FirestoreManager handles querying the global card registry and user-owned cards. AuthManager automatically creates a Firestore user document on signup with initial coin balance. All data is decoded directly into Codable Swift models (Card, UserCard, AppUser).</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p><code>FirestoreManager</code> fetches both the full card catalog and the user's subcollection in two async calls — Codable via <code>data(as:)</code> handles decoding automatically. <code>PackViewModel</code> attaches a real-time listener to the user document so the coin counter and timer update instantly across sessions without manual refresh. After a pack is opened, <code>PackManager</code> writes new owned cards and updates the coin balance atomically with <code>FieldValue.increment</code>.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 8 ─── -->
+    <!-- T8 n8n & Web Services -->
     <section class="topic" id="t8">
       <div class="topic-header">
         <span class="topic-num">08</span>
         <div class="topic-title-block">
-          <h2>Maps — MapKit</h2>
-          <div class="topic-subtitle">Interactive maps &middot; Markers &middot; Annotations &middot; Routes</div>
+          <h2>n8n &amp; Web Services</h2>
+          <div class="topic-subtitle">Workflow automation &middot; Webhooks &middot; Excel as database &middot; URLSession</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>MapKit is Apple's framework for embedding interactive maps in iOS apps. The SwiftUI <code>Map</code> view (iOS 17+ API) accepts a <code>MapCameraPosition</code> binding that controls the viewport, and displays <code>Marker</code> and <code>Annotation</code> views at geographic coordinates. You can show the user's real-time location with <code>UserAnnotation</code>, draw route overlays with <code>MapPolyline</code>, and respond to map tap and item-selection events. MapKit tiles are powered by Apple Maps and automatically adapt to light and dark mode.</p>
+        <p><strong>n8n</strong> is an open-source workflow automation platform — a visual tool where you chain together "nodes" (triggers, logic, services) without writing backend code. Each workflow can expose an HTTP webhook endpoint that an iOS app can call with <code>URLSession</code>. For our food ordering project, n8n acted as the entire backend: one workflow read the menu from an Excel spreadsheet and returned it as JSON; another received an order from the app and appended a new row to the Excel sheet. The iOS side just called those webhook URLs with standard <code>Codable</code> models.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
-        <pre><code class="language-swift">import SwiftUI
-import MapKit
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
+        <pre><code class="language-swift">import Foundation
 
-struct CardShopLocation: Identifiable {
-    let id = UUID()
-    let shopName:   String
-    let addressName: String
-    let coordinates: CLLocationCoordinate2D
+// ── Models — map the JSON that n8n returns ────────────
+struct MenuItem: Codable, Identifiable {
+    let id:       String
+    let name:     String
+    let price:    Double
+    let category: String
 }
 
-struct CardShopMapView: View {
-    let retailOutlets: [CardShopLocation] = [
-        CardShopLocation(shopName: "Hobby Central Cards",
-                         addressName: "Downtown, Chihuahua",
-                         coordinates: .init(latitude: 28.6353, longitude: -106.0889)),
-        CardShopLocation(shopName: "Collector Cave",
-                         addressName: "North Zone, Chihuahua",
-                         coordinates: .init(latitude: 28.6500, longitude: -106.1050))
-    ]
+struct OrderRequest: Codable {
+    let tableNumber: Int
+    let items:       [String]   // array of MenuItem IDs
+}
 
-    @State private var positionFocus: MapCameraPosition = .automatic
-    @State private var selectedShopID: UUID?
+struct OrderResponse: Codable {
+    let orderId: String
+    let total:   Double
+    let status:  String   // "received", "preparing", "ready"
+}
 
-    var currentSelectedShop: CardShopLocation? {
-        retailOutlets.first { $0.id == selectedShopID }
+// ── n8n service — calls webhook endpoints ─────────────
+struct N8nService {
+    // The n8n instance URL (self-hosted or cloud)
+    static let base = "https://n8n.example.com/webhook"
+
+    // GET /menu — n8n reads the Excel sheet, returns JSON array
+    static func fetchMenu() async throws -&gt; [MenuItem] {
+        let url = URL(string: "\(base)/menu")!
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard (response as? HTTPURLResponse)?.statusCode == 200
+        else { throw URLError(.badServerResponse) }
+        return try JSONDecoder().decode([MenuItem].self, from: data)
     }
+
+    // POST /order — n8n appends a row to Excel, returns receipt
+    static func placeOrder(_ order: OrderRequest) async throws -&gt; OrderResponse {
+        var req = URLRequest(url: URL(string: "\(base)/order")!)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try JSONEncoder().encode(order)
+
+        let (data, _) = try await URLSession.shared.data(for: req)
+        return try JSONDecoder().decode(OrderResponse.self, from: data)
+    }
+}
+
+// ── ViewModel that uses the service ───────────────────
+@MainActor
+class MenuViewModel: ObservableObject {
+    @Published var items: [MenuItem] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    func loadMenu() async {
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            items = try await N8nService.fetchMenu()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
+// ── View ──────────────────────────────────────────────
+struct MenuView: View {
+    @StateObject private var vm = MenuViewModel()
 
     var body: some View {
-        Map(position: $positionFocus, selection: $selectedShopID) {
-
-            // Device GPS anchor indicator
-            UserAnnotation()
-
-            // Map pin entries for hobby stores
-            ForEach(retailOutlets) { shop in
-                Marker(shop.shopName, coordinate: shop.coordinates)
-                    .tint(.blue)
-                    .tag(shop.id)
+        List(vm.items) { item in
+            HStack {
+                Text(item.name)
+                Spacer()
+                Text("$\(item.price, specifier: "%.2f")")
+                    .foregroundStyle(.secondary)
             }
         }
-        .mapControls {
-            MapCompass()
-            MapUserLocationButton()
-            MapScaleView()
-        }
-        .mapStyle(.standard(elevation: .realistic))
-        // Event sheet summary details layout overlay toggle
-        .safeAreaInset(edge: .bottom) {
-            if let shop = currentSelectedShop {
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(shop.shopName).font(.headline)
-                        Text(shop.addressName).font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Button("Plot Route") {
-                        openMapsAppRoute(to: shop)
-                    }
-                    .buttonStyle(.bordered)
-                }
-                .padding()
-                .background(.regularMaterial)
-            }
-        }
-        .ignoresSafeArea(edges: .top)
-    }
-
-    func openMapsAppRoute(to shop: CardShopLocation) {
-        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: shop.coordinates))
-        mapItem.name = shop.shopName
-        mapItem.openInMaps()
+        .overlay { if vm.isLoading { ProgressView() } }
+        .task { await vm.loadMenu() }
+        .navigationTitle("Menú")
     }
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">📍</span>
+        <span class="use-case-icon">⚙️</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>The "Local Game Stores" module inside my application exposed authorized card vendor networks on an interactive map canvas. Tapping custom markers populated event metadata panels, detailing tournament coordinates or trading hours, with external route delegation managed by Apple Maps intent bindings.</p>
+          <div class="use-case-label">Real Use Case — Food Ordering App</div>
+          <p>For the food ordering project, n8n hosted two workflows: a GET webhook that read the menu from a shared Excel file and returned each row as a JSON object, and a POST webhook that received the order JSON and appended a new row to the orders sheet. The iOS app called both endpoints with <code>URLSession</code> — n8n handled all the data logic, so the app had no backend server of its own.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 9 ─── -->
+    <!-- T9 TestFlight & App Store -->
     <section class="topic" id="t9">
       <div class="topic-header">
         <span class="topic-num">09</span>
         <div class="topic-title-block">
-          <h2>Camera &amp; QR Reader</h2>
-          <div class="topic-subtitle">AVFoundation &middot; AVCaptureSession &middot; UIViewRepresentable</div>
+          <h2>TestFlight &amp; App Store</h2>
+          <div class="topic-subtitle">Distribution &middot; Archive &middot; App Store Connect &middot; Info.plist</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p>iOS camera access is managed by <code>AVFoundation</code>. An <code>AVCaptureSession</code> wires together inputs (the camera device) and outputs (still images, video, or metadata). For QR reading, you add an <code>AVCaptureMetadataOutput</code> — the framework fires a delegate method every time a QR code or barcode is detected in the live camera frame. Because AVFoundation is a UIKit API, it must be wrapped in a <code>UIViewRepresentable</code> to bridge into SwiftUI. The camera permission key <code>NSCameraUsageDescription</code> must be added to <code>Info.plist</code>.</p>
+        <p><strong>TestFlight</strong> is Apple's official beta testing platform. Before an app reaches the App Store, you upload a build to App Store Connect and distribute it to testers via TestFlight — either internal testers (up to 100 people on your team) or external testers (up to 10,000 via a public link) who install the app on their real device without it being publicly listed. The process requires a valid Bundle Identifier, a signing certificate, and an <code>Info.plist</code> with all required privacy usage descriptions. For the SwiftUILearning app, TestFlight let classmates and the professor install and test the app on their own iPhones before final submission.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
-        <pre><code class="language-swift">import SwiftUI
-import AVFoundation
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift — Info.plist keys &amp; build config</span></div>
+        <pre><code class="language-swift">// ── Info.plist — required privacy keys ───────────────
+// These strings appear in the iOS permission dialog.
+// Missing keys cause App Store review rejection.
 
-// ── UIViewRepresentable bridges AVFoundation → SwiftUI ─
-struct CardScannerView: UIViewRepresentable {
-    var onTokenDetected: (String) -&gt; Void
+// NSLocationWhenInUseUsageDescription
+//   → "We use your location to show the nearest branch."
+//   → Required by LocationView / CoreLocation
 
-    // Coordinator acts as the AVFoundation delegate
-    class Coordinator: NSObject, AVCaptureMetadataOutputObjectsDelegate {
-        let targetView: CardScannerView
-        init(_ viewInstance: CardScannerView) { self.targetView = viewInstance }
+// NSCameraUsageDescription
+//   → "We need camera access to scan QR codes."
+//   → Required by any AVCaptureSession usage
 
-        func metadataOutput(
-            _ output: AVCaptureMetadataOutput,
-            didOutput objects: [AVMetadataObject],
-            from connection: AVCaptureConnection
-        ) {
-            guard
-                let rawObj = objects.first as? AVMetadataMachineReadableCodeObject,
-                let valueString = rawObj.stringValue
-            else { return }
+// ── Reading bundle metadata at runtime ───────────────
+let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]
+              as? String ?? "1.0"        // e.g. "1.0"
 
-            // Ensure UI actions run safely on the primary loop thread
-            DispatchQueue.main.async {
-                self.targetView.onTokenDetected(valueString)
-            }
-        }
-    }
+let build   = Bundle.main.infoDictionary?["CFBundleVersion"]
+              as? String ?? "1"          // e.g. "4" (increments each upload)
 
-    func makeCoordinator() -&gt; Coordinator { Coordinator(self) }
+let appName = Bundle.main.infoDictionary?["CFBundleName"]
+              as? String ?? "App"        // "SwiftUILearning"
 
-    func makeUIView(context: Context) -&gt; UIView {
-        let view          = UIView(frame: .zero)
-        let captureStream = AVCaptureSession()
+// ── Google-Service-Info.plist (GoogleService-Info.plist) ─
+// Firebase configuration file — added to the Xcode project root.
+// FirebaseApp.configure() in CardsApp.swift reads it automatically.
+// Contains: API keys, project ID, bundle ID, OAuth client IDs.
+// NEVER commit this to a public GitHub repo.
+// The Google.plist in this project serves the same role.
 
-        guard
-            let cameraSource = AVCaptureDevice.default(for: .video),
-            let captureInput = try? AVCaptureDeviceInput(device: cameraSource),
-            captureStream.canAddInput(captureInput)
-        else { return view }
+// ── Checklist before archiving for TestFlight ─────────
+// 1. Signing &amp; Capabilities → set your Team and Bundle ID
+//    (e.g. com.yourname.swiftuilearning)
+// 2. Bump the Build number (must be higher than last upload)
+// 3. All required Info.plist privacy keys must be present
+// 4. Product → Archive   (builds a release .xcarchive)
+// 5. Organizer → Distribute App → App Store Connect → Upload
+// 6. Wait ~15 min for Apple to process the build
+// 7. App Store Connect → TestFlight tab
+//    → Add internal testers (by Apple ID)
+//    → Or create an External Group with a public invite link
+// 8. Testers receive an email, install the TestFlight app,
+//    and then install your build — no App Store approval needed
 
-        captureStream.addInput(captureInput)
-
-        let metadataPipeline = AVCaptureMetadataOutput()
-        captureStream.addOutput(metadataPipeline)
-        metadataPipeline.setMetadataObjectsDelegate(context.coordinator, queue: .main)
-        metadataPipeline.metadataObjectTypes = [.qr, .code128, .ean13]
-
-        // Video configuration layer context linkage
-        let renderingLayer = AVCaptureVideoPreviewLayer(session: captureStream)
-        renderingLayer.videoGravity = .resizeAspectFill
-        renderingLayer.frame = UIScreen.main.bounds
-        view.layer.addSublayer(renderingLayer)
-
-        DispatchQueue.global(qos: .userInitiated).async {
-            captureStream.startRunning()
-        }
-        return view
-    }
-
-    func updateUIView(_ uiView: UIView, context: Context) {}
-}
-
-// ── SwiftUI screen that uses the scanner ──────────────
-struct InventoryScannerScreen: View {
-    @State private var registeredCode: String?
-    @State private var displayAlert = false
-
+// ── Displaying version to users (from a Settings or About view) ─
+struct AboutView: View {
     var body: some View {
-        ZStack {
-            CardScannerView { stringCode in
-                registeredCode = stringCode
-                displayAlert = true
-            }
-            .ignoresSafeArea()
-
-            // Viewfinder Target Graphic Box
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(.white, lineWidth: 2)
-                .frame(width: 240, height: 240)
+        List {
+            LabeledContent("Version", value: version)
+            LabeledContent("Build",   value: build)
+            LabeledContent("App",     value: appName)
         }
-        .alert("Code Successfully Scanned", isPresented: $displayAlert) {
-            Button("Dismiss") {}
-        } message: {
-            Text("Decoded Token Data ID: \(registeredCode ?? "Unknown Card")")
-        }
-        .navigationTitle("Scan Card Code")
+        .navigationTitle("Acerca de")
     }
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">📷</span>
+        <span class="use-case-icon">✈️</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>My card collecting app included a high-speed scanner view to dynamically register physical items via serial codes or booster codes. Scanning serial stamps instantly fetched structural market card entries, automatically verifying collection authenticity metrics without manual field data tracking.</p>
+          <div class="use-case-label">Real Use Case — SwiftUILearning App</div>
+          <p>For the SwiftUILearning project, the app was archived in Xcode and uploaded to App Store Connect. A TestFlight external link was generated and shared with classmates, who installed the app on their real iPhones without it ever appearing on the App Store. The <code>Google.plist</code> (Firebase config) and <code>Info.plist</code> privacy keys were both required for the build to pass Apple's automated checks before becoming available in TestFlight.</p>
         </div>
       </div>
     </section>
 
-    <!-- ─── TOPIC 10 ─── -->
+    <!-- T10 UIKit Fundamentals -->
     <section class="topic" id="t10">
       <div class="topic-header">
         <span class="topic-num">10</span>
         <div class="topic-title-block">
-          <h2>CoreLocation</h2>
-          <div class="topic-subtitle">GPS &middot; Permissions &middot; CLLocation &middot; Distance</div>
+          <h2>UIKit Fundamentals</h2>
+          <div class="topic-subtitle">UIView &middot; UIViewController &middot; UIViewRepresentable &middot; UIApplication</div>
         </div>
       </div>
-
       <div class="what-it-is">
         <div class="section-label">What it is</div>
-        <p><code>CoreLocation</code> gives iOS apps access to the device's geographic position using GPS, Wi-Fi triangulation, and cellular data. Before receiving any location, you must request user permission — either <em>when in use</em> (only while the app is open) or <em>always</em> (including when backgrounded). Updates are delivered via <code>CLLocationManagerDelegate</code> callbacks. You can compute the distance between two <code>CLLocation</code> objects with a single method call, or set up geofences (<code>CLCircularRegion</code>) that fire events when the user enters or exits an area. The required <code>Info.plist</code> key is <code>NSLocationWhenInUseUsageDescription</code>.</p>
+        <p>UIKit is Apple's original imperative UI framework, present since iOS 2 (2008). You construct views by creating objects, setting properties, and adding subviews manually — the opposite of SwiftUI's declarative approach. Even in a SwiftUI app, UIKit surfaces in several places: <code>UIApplication.shared</code> exposes app-level operations (opening URLs, accessing the status bar), <code>UIViewRepresentable</code> bridges any <code>UIView</code> into SwiftUI so you can use UIKit-only components, and many Apple frameworks (<code>AVFoundation</code>, <code>MapKit</code> overlays, <code>WebKit</code>) still ship UIKit APIs that need wrapping before they can appear in a SwiftUI view.</p>
       </div>
-
       <div class="section-label">Code Snippet</div>
       <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
-          <span class="code-lang">swift</span>
-        </div>
-        <pre><code class="language-swift">import CoreLocation
-import SwiftUI
+        <div class="code-header"><div class="code-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div><span class="code-lang">swift</span></div>
+        <pre><code class="language-swift">import SwiftUI
+import UIKit
+import WebKit
 
-// ── Observable wrapper around CLLocationManager ────────
-@Observable
-class UserLocationManager: NSObject, CLLocationManagerDelegate {
-    private let coreLocationService = CLLocationManager()
-    var lastRecordedLocation: CLLocation?
-    var permissionStatus: CLAuthorizationStatus = .notDetermined
+// ── 1. UIApplication — used in LocationView.swift ────
+// When location is denied, this button opens iOS Settings.
+// UIApplication.openSettingsURLString is a UIKit constant.
+Button("Abrir Ajustes") {
+    if let url = URL(string: UIApplication.openSettingsURLString) {
+        UIApplication.shared.open(url)   // UIKit API inside SwiftUI
+    }
+}
+// This exact code appears in LocationView.swift for the
+// .denied / .restricted authorization case.
 
-    override init() {
-        super.init()
-        coreLocationService.delegate = self
-        coreLocationService.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+// ── 2. UIViewRepresentable — bridge UIKit → SwiftUI ──
+// Wraps WKWebView (UIKit) so it renders inside a SwiftUI view.
+struct WebView: UIViewRepresentable {
+    let url: URL
+
+    // makeUIView: called ONCE to create the UIKit view
+    func makeUIView(context: Context) -&gt; WKWebView {
+        let wv = WKWebView()
+        wv.load(URLRequest(url: url))
+        return wv
     }
 
-    func requestDevicePermission() {
-        coreLocationService.requestWhenInUseAuthorization()
-    }
-
-    // Delegate — called when permission changes
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        permissionStatus = manager.authorizationStatus
-        if permissionStatus == .authorizedWhenInUse || permissionStatus == .authorizedAlways {
-            coreLocationService.startUpdatingLocation()
-        }
-    }
-
-    // Delegate — called with new GPS fix
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations positions: [CLLocation]) {
-        lastRecordedLocation = positions.last
-    }
-
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("GPS Stream Error: \(error.localizedDescription)")
-    }
-
-    // Utility: distance calculation metric output in meters
-    func measureMetresToTarget(targetCoords: CLLocationCoordinate2D) -&gt; Double? {
-        guard let currentAnchor = lastRecordedLocation else { return nil }
-        let targetSpot = CLLocation(latitude: targetCoords.latitude, longitude: targetCoords.longitude)
-        return currentAnchor.distance(from: targetSpot)
+    // updateUIView: called when SwiftUI state changes
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        // reload or update the WKWebView if url changes
     }
 }
 
-// ── View: show nearest trade meetup store ─────────────
-struct ClosestStoreView: View {
-    @State private var locationService = UserLocationManager()
-    let retailNetworks = CardShopLocation.samples
+// Usage inside a SwiftUI View
+struct TermsView: View {
+    var body: some View {
+        WebView(url: URL(string: "https://example.com/terms")!)
+            .ignoresSafeArea()
+    }
+}
 
-    var closestShop: CardShopLocation? {
-        retailNetworks.min {
-            (locationService.measureMetresToTarget(targetCoords: $0.coordinates) ?? .infinity) &lt;
-            (locationService.measureMetresToTarget(targetCoords: $1.coordinates) ?? .infinity)
-        }
+// ── 3. UIViewControllerRepresentable ─────────────────
+// Same idea for full UIViewControllers — e.g. PHPickerViewController
+// to let the user pick photos from their camera roll.
+struct PhotoPicker: UIViewControllerRepresentable {
+    var onPick: (UIImage) -&gt; Void
+
+    func makeUIViewController(context: Context)
+        -&gt; PHPickerViewController {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = context.coordinator
+        return picker
     }
 
-    var body: some View {
-        VStack(spacing: 24) {
-            if locationService.permissionStatus == .notDetermined {
-                Button("Authorize Location Tracking") {
-                    locationService.requestDevicePermission()
+    func updateUIViewController(_ uiViewController: PHPickerViewController,
+                                context: Context) {}
+
+    func makeCoordinator() -&gt; Coordinator { Coordinator(self) }
+
+    class Coordinator: NSObject, PHPickerViewControllerDelegate {
+        let parent: PhotoPicker
+        init(_ p: PhotoPicker) { parent = p }
+
+        func picker(_ picker: PHPickerViewController,
+                    didFinishPicking results: [PHPickerResult]) {
+            picker.dismiss(animated: true)
+            results.first?.itemProvider.loadObject(ofClass: UIImage.self) { obj, _ in
+                if let image = obj as? UIImage {
+                    DispatchQueue.main.async { self.parent.onPick(image) }
                 }
-                .buttonStyle(.borderedProminent)
-            } else if let shop = closestShop,
-                      let rangeDist = locationService.measureMetresToTarget(targetCoords: shop.coordinates) {
-                VStack(spacing: 6) {
-                    Text("Closest Local Trading Spot").font(.caption).foregroundStyle(.secondary)
-                    Text(shop.shopName).font(.title2.bold())
-                    Text(String(format: "%.0f meters from current location", rangeDist))
-                        .foregroundStyle(.secondary)
-                }
-            } else {
-                ProgressView("Calibrating device GPS metrics…")
             }
         }
-        .onAppear { locationService.requestDevicePermission() }
-        .padding()
     }
 }</code></pre>
       </div>
-
       <div class="use-case">
-        <span class="use-case-icon">🧭</span>
+        <span class="use-case-icon">🧩</span>
         <div class="use-case-content">
-          <div class="use-case-label">Real Use Case</div>
-          <p>My card collecting app processed active coordinates through CoreLocation to automatically highlight regional tournament events or card trading hubs based on proximate distance matrix queries. Arranging location results sorted nearest community meetups dynamically using relative user range metrics.</p>
+          <div class="use-case-label">Real Use Case — Chilechilo Cards</div>
+          <p>In <code>LocationView.swift</code>, when the user has denied location access, the "Abrir Ajustes" button calls <code>UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)</code> — this is UIKit used directly inside a SwiftUI view. Understanding <code>UIViewRepresentable</code> was also essential for integrating the Firebase Google Sign-In screen (a <code>UIViewController</code>) and for any future feature requiring AVFoundation camera access, both of which only exist as UIKit APIs.</p>
         </div>
       </div>
     </section>
@@ -1378,33 +1064,25 @@ struct ClosestStoreView: View {
   </main>
 </div>
 
-<!-- ═══ FOOTER ═══ -->
 <footer class="site-footer">
-  <p>🌶️ Chilechilo Cards — SwiftUI + Firebase iOS Application</p>
-  <p>Built with SwiftUI &middot; Firebase Auth &middot; Firestore &middot; MapKit &middot; 2026</p>
+  <p>iOS Dev Quick Guide 101 &middot; <strong>F&eacute;lix Neder</strong> &middot; Universidad La Salle Chihuahua</p>
+  <p>Mobile Programming 2 &middot; Final Exam &middot; Week 16 &middot; 2026</p>
 </footer>
 
 <script>
-  // Syntax highlighting
   hljs.highlightAll();
-
-  // Active sidebar link — highlight as user scrolls
   const sections = document.querySelectorAll('.topic');
   const links    = document.querySelectorAll('#toc a');
-
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         links.forEach(l => l.classList.remove('active'));
-        const id = entry.target.id;
-        const active = document.querySelector(`#toc a[href="#${id}"]`);
+        const active = document.querySelector(`#toc a[href="#${entry.target.id}"]`);
         if (active) active.classList.add('active');
       }
     });
-  }, { threshold: 0.35 });
-
+  }, { threshold: 0.3 });
   sections.forEach(s => observer.observe(s));
 </script>
-
 </body>
 </html>
